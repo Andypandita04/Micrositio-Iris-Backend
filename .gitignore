@@ -1,0 +1,14 @@
+# Archivos .env
+.env
+.env.local
+.env.*
+*.env
+
+# Otros archivos comunes a ignorar
+node_modules/
+.DS_Store
+dist/
+build/
+*.log
+
+bd-micrositio-iris-firebase-adminsdk-fbsvc-87bd7e3157.json

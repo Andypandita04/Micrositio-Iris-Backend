@@ -2,7 +2,7 @@ const express = require('express');
 const admin = require('firebase-admin');
 
 // Inicializa Firebase Admin SDK (usa tus credenciales reales)
-const serviceAccount = require('./path-to-your-firebase-adminsdk.json'); // Descarga esto desde Firebase Console
+const serviceAccount = require('./bd-micrositio-iris-firebase-adminsdk-fbsvc-87bd7e3157.json'); // Descarga esto desde Firebase Console
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
