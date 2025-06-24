@@ -6,7 +6,15 @@ const serviceAccount = require('./bd-micrositio-iris-firebase-adminsdk-fbsvc-87b
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
+  //databaseURL: "https://mi-proyecto-12345.firebaseio.com" // Usa TU URL aquí
 });
+
+admin.firestore().listCollections().then(collections => {
+  console.log("Conexión exitosa a Firestore. Colecciones:", collections.map(c => c.id));
+}).catch(error => {
+  console.error("Error conectando a Firestore:", error);
+});
+
 
 // Inicializa Express
 const app = express();
