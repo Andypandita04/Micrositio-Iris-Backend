@@ -5,3 +5,6 @@
 npm install express firebase-admin
 node app.js´´´
 
+<pre> ```bash npm install express firebase-admin
+node app.js ``` </pre>
+
