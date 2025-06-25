@@ -3,5 +3,5 @@
 ### Poner en terminal
 ´´´bash
 npm install express firebase-admin
-node app.js
+node app.js´´´
 
