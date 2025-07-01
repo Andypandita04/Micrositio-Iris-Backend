@@ -27,24 +27,6 @@ Cuenta en Supabase
 
 Postman (para pruebas API)
 
-🚀 Instalación Rápida
-
-```bash
-# 1. Clonar repositorio
-git clone https://github.com/tu-org/micrositio-iris-backend.git
-
-# 2. Instalar dependencias
-npm install
-
-# 3. Configurar entorno (crear archivo .env)
-cp .env.example .env
-# Editar .env con tus credenciales Supabase
-
-# 4. Iniciar servidor
-cd src
-npm run dev
-
-
 ## 🌐 Variables de Entorno
 Archivo .env requerido:
 
@@ -75,3 +57,22 @@ Endpoints para Testing/Learning Cards
 Integración con WebSockets para updates en tiempo real
 
 Documentación Swagger/OpenAPI
+
+🚀 Instalación Rápida
+
+```bash
+# 1. Clonar repositorio
+git clone https://github.com/tu-org/micrositio-iris-backend.git
+
+# 2. Instalar dependencias
+npm install
+
+# 3. Configurar entorno (crear archivo .env)
+cp .env.example .env
+# Editar .env con tus credenciales Supabase
+
+# 4. Iniciar servidor
+cd src
+npm run dev
+
+
