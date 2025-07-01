@@ -1,56 +1,122 @@
-// Importar el SDK de Firebase Admin para interactuar con Firestore
-const admin = require('firebase-admin');
-
-// Inicializar Firebase (asegúrate de que ya está inicializado en app.js)
-const db = admin.firestore();
+// src/repositories/proyectoRepository.js
+/**
+ * Repositorio para interactuar con la tabla de proyectos en Supabase.
+ * @class
+ */
+import supabase from '../config/supabaseClient.js';
+import ApiError from '../utils/ApiError.js';
+import Proyecto from '../models/Proyecto.js';
 
 class ProyectoRepository {
   /**
-   * Crea un nuevo proyecto en Firestore.
-   * @param {Object} proyectoData - Datos del proyecto { nombre, descripcion }.
-   * @returns {Promise<Object>} - Retorna el proyecto creado con su ID generado por Firestore.
+   * Crea un nuevo proyecto en la base de datos.
+   * @async
+   * @param {Object} proyectoData - Datos del proyecto a crear.
+   * @returns {Promise<Object>} El proyecto creado.
+   * @throws {ApiError} Si ocurre un error al crear el proyecto.
    */
   async crearProyecto(proyectoData) {
-    try {
-      // Agrega un documento a la colección 'proyectos'. Firestore genera el ID automáticamente.
-      const docRef = await db.collection('proyectos').add(proyectoData);
-      
-      // Retorna el objeto proyecto con el ID asignado por Firestore
-      return { 
-        id: docRef.id, 
-        nombre: proyectoData.nombre, 
-        descripcion: proyectoData.descripcion 
-      };
-    } catch (error) {
-      console.error('Error en ProyectoRepository.crearProyecto:', error);
-      throw new Error('Error al crear el proyecto en Firestore');
+    const { data, error } = await supabase
+      .from('proyecto')
+      .insert(proyectoData)
+      .select();
+
+    if (error) {
+      throw new ApiError(`Error al crear proyecto: ${error.message}`, 500);
     }
+
+    return new Proyecto(data[0]);
   }
 
   /**
    * Obtiene un proyecto por su ID.
-   * @param {string} proyectoId - ID del proyecto a buscar.
-   * @returns {Promise<Object|null>} - Retorna el proyecto o null si no existe.
+   * @async
+   * @param {number} id - ID del proyecto a obtener.
+   * @returns {Promise<Object|null>} El proyecto encontrado o null si no existe.
+   * @throws {ApiError} Si ocurre un error al obtener el proyecto.
    */
-  async obtenerProyectoPorId(proyectoId) {
-    try {
-      const doc = await db.collection('proyectos').doc(proyectoId).get();
-      
-      // Si el documento no existe, retorna null
-      if (!doc.exists) {
-        return null;
-      }
-      
-      // Retorna el proyecto con sus datos y ID
-      return { 
-        id: doc.id, 
-        ...doc.data() 
-      };
-    } catch (error) {
-      console.error('Error en ProyectoRepository.obtenerProyectoPorId:', error);
-      throw new Error('Error al obtener el proyecto de Firestore');
+  async obtenerProyectoPorId(id) {
+    const { data, error } = await supabase
+      .from('proyecto')
+      .select('*')
+      .eq('id_proyecto', id)
+      .single();
+
+    // PGRST116 es el código de error cuando no se encuentra ningún registro
+    if (error && error.code !== 'PGRST116') {
+      throw new ApiError(`Error al obtener proyecto: ${error.message}`, 500);
     }
+
+    return data ? Proyecto.fromDatabase(data) : null;
+  }
+
+  /**
+   * Actualiza un proyecto existente.
+   * @async
+   * @param {number} id - ID del proyecto a actualizar.
+   * @param {Object} proyectoData - Datos a actualizar.
+   * @returns {Promise<Object>} El proyecto actualizado.
+   * @throws {ApiError} Si ocurre un error al actualizar el proyecto.
+   */
+  async actualizarProyecto(id, proyectoData) {
+    const { data, error } = await supabase
+      .from('proyecto')
+      .update(proyectoData)
+      .eq('id_proyecto', id)
+      .select();
+
+    if (error) {
+      throw new ApiError(`Error al actualizar proyecto: ${error.message}`, 500);
+    }
+
+    return Proyecto.fromDatabase(data[0]);
+  }
+
+  /**
+   * Elimina un proyecto existente.
+   * @async
+   * @param {number} id - ID del proyecto a eliminar.
+   * @returns {Promise<Object>} El proyecto eliminado.
+   * @throws {ApiError} Si ocurre un error al eliminar el proyecto.
+   */
+  async eliminarProyecto(id) {
+    const { data, error } = await supabase
+      .from('proyecto')
+      .delete()
+      .eq('id_proyecto', id)
+      .select();
+
+    if (error) {
+      throw new ApiError(`Error al eliminar proyecto: ${error.message}`, 500);
+    }
+
+    return Proyecto.fromDatabase(data[0]);
+  }
+
+  /**
+   * Lista todos los proyectos, opcionalmente filtrados por estado.
+   * @async
+   * @param {string} [estado] - Estado para filtrar los proyectos.
+   * @returns {Promise<Array>} Lista de proyectos.
+   * @throws {ApiError} Si ocurre un error al listar los proyectos.
+   */
+  async listarProyectos(estado) {
+    // Iniciar la consulta básica
+    let query = supabase.from('proyecto').select('*');
+
+    // Aplicar filtro por estado si se proporciona
+    if (estado) {
+      query = query.eq('estado', estado);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      throw new ApiError(`Error al listar proyectos: ${error.message}`, 500);
+    }
+
+    return data.map(proyecto => Proyecto.fromDatabase(proyecto));
   }
 }
 
-module.exports = ProyectoRepository;
+export default ProyectoRepository;

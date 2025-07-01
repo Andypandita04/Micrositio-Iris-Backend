@@ -1,31 +1,32 @@
+// src/services/proyectoService.js
 /**
  * Servicio para manejar la lógica de negocio relacionada con proyectos.
  * @class
  */
 import ProyectoRepository from '../repositories/proyectoRepository.js';
 import ApiError from '../utils/ApiError.js';
-import Proyecto from '../models/Proyecto.js';
 
 class ProyectoService {
   /**
-   * @param {ProyectoRepository} proyectoRepository - Inyectamos el repositorio como dependencia.
+   * Crea una instancia del servicio.
+   * Inicializa el repositorio de proyectos.
    */
-  constructor(proyectoRepository) {
-    this.proyectoRepository = proyectoRepository;
+  constructor() {
+    /**
+     * Instancia del repositorio de proyectos.
+     * @type {ProyectoRepository}
+     */
+    this.proyectoRepository = new ProyectoRepository();
   }
 
   /**
-   * Crea un nuevo proyecto después de validar los datos.
+   * Crea un nuevo proyecto.
    * @async
-   * @param {Object} proyectoData - Datos del proyecto { nombre, descripcion }.
-   * @returns {Promise<Object>} - Proyecto creado con ID.
+   * @param {Object} proyectoData - Datos del proyecto a crear.
+   * @returns {Promise<Object>} El proyecto creado.
    */
   async crearProyecto(proyectoData) {
-    // Validación a través del modelo
-    const datosValidados = Proyecto.validateCreate(proyectoData);
-    const proyecto = await this.proyectoRepository.crearProyecto(datosValidados);
-    return proyecto.toAPI();
-
+    return this.proyectoRepository.crearProyecto(proyectoData);
   }
 
   /**
@@ -42,9 +43,9 @@ class ProyectoService {
       throw new ApiError('Proyecto no encontrado', 404);
     }
     
-    return proyecto.toAPI();
+    return proyecto;
   }
-  
+
   /**
    * Actualiza un proyecto existente.
    * @async
@@ -54,13 +55,13 @@ class ProyectoService {
    * @throws {ApiError} Si el proyecto no se encuentra.
    */
   async actualizarProyecto(id, proyectoData) {
-    const datosValidados = Proyecto.validateUpdate(proyectoData);
-    const proyecto = await this.proyectoRepository.actualizarProyecto(id, datosValidados);
+    const proyecto = await this.proyectoRepository.actualizarProyecto(id, proyectoData);
+    
     if (!proyecto) {
       throw new ApiError('Proyecto no encontrado', 404);
     }
     
-    return proyecto.toAPI();
+    return proyecto;
   }
 
   /**
@@ -77,7 +78,7 @@ class ProyectoService {
       throw new ApiError('Proyecto no encontrado', 404);
     }
     
-    return deleted.toAPI();
+    return deleted;
   }
 
   /**
@@ -87,8 +88,8 @@ class ProyectoService {
    * @returns {Promise<Array>} Lista de proyectos.
    */
   async listarProyectos(estado) {
-    const proyectos = await this.proyectoRepository.listarProyectos(estado);
-    return proyectos.map(proyecto => proyecto.toAPI());
+    return this.proyectoRepository.listarProyectos(estado);
   }
 }
+
 export default ProyectoService;
