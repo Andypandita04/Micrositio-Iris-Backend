@@ -1,18 +1,18 @@
 {
   "name": "micrositio_iris-back",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "express": "^5.1.0",
-    "express-handlebars": "^8.0.3",
-    "firebase-admin": "^13.4.0",
-    "morgan": "^1.10.0"
+    "@supabase/supabase-js": "^2.50.2",
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
+    "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }

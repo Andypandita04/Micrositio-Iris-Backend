@@ -1,11 +1,12 @@
+// src/controllers/proyectoController.js
 /**
  * Controlador para manejar las operaciones CRUD de proyectos.
  * @class
  */
 import ProyectoService from '../services/proyectoService.js';
-import ProyectoRepository from '../repositories/proyectoRepository.js';
 import { proyectoCreateSchema, proyectoUpdateSchema } from '../middlewares/validation/proyectoSchema.js';
 import ApiError from '../utils/ApiError.js';
+
 class ProyectoController {
   /**
    * Crea una instancia del controlador.
@@ -15,17 +16,15 @@ class ProyectoController {
     /**
      * Instancia del servicio de proyectos.
      * @type {ProyectoService}
-     
-    this.proyectoService = new ProyectoService();*/
-
-      const proyectoRepository = new ProyectoRepository();
-      this.proyectoService = new ProyectoService(proyectoRepository);
+     */
+    this.proyectoService = new ProyectoService();
   }
-  
+
   /**
-   * Maneja la creación de un proyecto (POST /proyectos).
-   * @param {Object} req - Request de Express.
-   * @param {Object} res - Response de Express.
+   * Maneja la creación de un nuevo proyecto.
+   * @async
+   * @param {Object} req - Objeto de solicitud Express.
+   * @param {Object} res - Objeto de respuesta Express.
    * @param {Function} next - Función para pasar al siguiente middleware.
    */
   async crearProyecto(req, res, next) {
@@ -45,9 +44,11 @@ class ProyectoController {
   }
 
   /**
-   * Maneja la obtención de un proyecto (GET /proyectos/:id).
-   * @param {Object} req - Request de Express.
-   * @param {Object} res - Response de Express.
+   * Maneja la obtención de un proyecto por su ID.
+   * @async
+   * @param {Object} req - Objeto de solicitud Express.
+   * @param {Object} res - Objeto de respuesta Express.
+   * @param {Function} next - Función para pasar al siguiente middleware.
    */
   async obtenerProyecto(req, res, next) {
     try {
@@ -65,7 +66,6 @@ class ProyectoController {
       next(error);
     }
   }
-
 
   /**
    * Maneja la actualización de un proyecto existente.
