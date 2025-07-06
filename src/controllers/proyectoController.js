@@ -45,19 +45,28 @@ class ProyectoController {
   }
 
   /**
-   * Maneja la obtención de un proyecto (GET /proyectos/:id).
+   * Maneja la obtención de un proyecto (GET /proyectos/).
    * @param {Object} req - Request de Express.
    * @param {Object} res - Response de Express.
    */
   async obtenerProyecto(req, res, next) {
     try {
+      if (!req.body || !req.body.id_proyecto) {
+        throw new ApiError('Se requiere el campo "id_proyecto" en el body', 400);
+      }
+
+      // Convertir el ID a número entero
+      const idProyecto = parseInt(req.body.id_proyecto);
+
+      if (isNaN(idProyecto)) {
+            throw new ApiError('El ID debe ser un número válido', 400);
+      }
+
       // Obtener el proyecto usando el servicio
-      const proyecto = await this.proyectoService.obtenerProyecto(req.params.id);
+      const proyecto = await this.proyectoService.obtenerProyecto(idProyecto);
       
       // Si no se encuentra el proyecto, lanzar error 404
-      if (!proyecto) {
-        throw new ApiError('Proyecto no encontrado', 404);
-      }
+
       
       // Responder con el proyecto encontrado
       res.json(proyecto);
@@ -76,12 +85,16 @@ class ProyectoController {
    */
   async actualizarProyecto(req, res, next) {
     try {
-      // Validar los datos de entrada con Zod
-      const validatedData = proyectoUpdateSchema.parse(req.body);
       
+      if (!req.body.id_proyecto) {
+              throw new ApiError('Se requiere el campo "id_proyecto" en el body', 400);
+      }
+      const { id_proyecto, ...updateData } = req.body;
+      // Validar los datos de entrada con Zod
+      const validatedData = proyectoUpdateSchema.parse(updateData);
       // Actualizar el proyecto usando el servicio
       const proyecto = await this.proyectoService.actualizarProyecto(
-        req.params.id,
+        id_proyecto,
         validatedData
       );
       
@@ -101,8 +114,18 @@ class ProyectoController {
    */
   async eliminarProyecto(req, res, next) {
     try {
+      if (!req.body |!req.body.id_proyecto) {
+              throw new ApiError('Se requiere el campo "id_proyecto" en el body', 400);
+      }
+
+      const idProyecto = parseInt(req.params.id_proyecto);
+
+      if (isNaN(idProyecto)) {
+        throw new ApiError('El ID debe ser un número válido', 400);
+      }
+
       // Eliminar el proyecto usando el servicio
-      await this.proyectoService.eliminarProyecto(req.params.id);
+      await this.proyectoService.eliminarProyecto(idProyecto);
       
       // Responder sin contenido (204)
       res.status(204).end();
