@@ -1,0 +1,105 @@
+{
+  "info": {
+    "_postman_id": "c3d4e5f6-g7h8-i9j0-k1l2-m3n4o5p6q7r8",
+    "name": "API Empleados (Body Parameters)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Crear Empleado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre_pila\": \"María\",\n  \"apellido_paterno\": \"López\",\n  \"apellido_materno\": \"García\",\n  \"celular\": \"5512345678\",\n  \"correo\": \"maria.lopez@example.com\",\n  \"numero_empleado\": \"EMP456\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/empleados",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["empleados"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Empleado",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 2\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/empleados",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["empleados"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar Empleado",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 2,\n  \"celular\": \"5511111111\",\n  \"correo\": \"maria.nuevo@example.com\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/empleados",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["empleados"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Desactivar Empleado",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 2\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/empleados",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["empleados"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
