@@ -85,10 +85,17 @@ class EmpleadoController {
    */
   async desactivar(req, res, next) {
     try {
-      if (!req.body.id) {
+      if (!req.body ||!req.body.id) {
         throw new ApiError('Se requiere el campo "id" en el body', 400);
       }  
-      const empleado = await this.empleadoService.desactivar(req.params.id);
+
+    // Convertir el ID a número entero
+    const idEmpleado = parseInt(req.body.id);
+    
+    if (isNaN(idEmpleado)) {
+      throw new ApiError('El ID debe ser un número válido', 400);
+    }
+      const empleado = await this.empleadoService.desactivar(idEmpleado);
       res.json(empleado);
     } catch (error) {
       next(error);
