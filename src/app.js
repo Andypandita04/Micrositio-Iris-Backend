@@ -4,7 +4,7 @@ import cors from 'cors';
 import proyectoRoutes from './routes/proyectoRoutes.js';
 import empleadoProyectoRoutes from './routes/empleadoProyectoRoutes.js';
 import empleadoRoutes from './routes/empleadoRoutes.js'; 
-
+import secuenciaRoutes from './routes/secuenciaRoutes.js';
 import errorHandler from './middlewares/errorHandler.js';
 import bodyParser from 'body-parser'; 
  
@@ -25,6 +25,7 @@ app.use(express.json());
 app.use('/proyectos', proyectoRoutes);
 app.use('/', empleadoProyectoRoutes);
 app.use('/empleados', empleadoRoutes);
+app.use('/secuencias', secuenciaRoutes)
 
 // Ruta básica de prueba
 app.get('/', (req, res) => {
