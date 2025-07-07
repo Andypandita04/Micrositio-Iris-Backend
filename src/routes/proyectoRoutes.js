@@ -32,7 +32,7 @@ router.get('/', proyectoController.listarProyectos.bind(proyectoController));
  * @name get/proyectos/
  * @function
  */
-router.get('/', proyectoController.obtenerProyecto.bind(proyectoController));
+router.get('/proyecto', proyectoController.obtenerProyecto.bind(proyectoController));
 
 /**
  * Ruta PATCH para actualizar un proyecto existente.
