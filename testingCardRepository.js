@@ -1,6 +1,6 @@
 // src/repositories/testingCardRepository.js
-import supabase from '../config/supabaseClient.js';
-import ApiError from '../utils/ApiError.js';
+import supabase from './src/config/supabaseClient.js';
+import ApiError from './src/utils/ApiError.js';
 import TestingCard from '../models/TestingCard.js';
 
 class TestingCardRepository {

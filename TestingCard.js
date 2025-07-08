@@ -3,7 +3,7 @@
  * Modelo que representa una testing card en el sistema
  * @class
  */
-import { testingCardCreateSchema, testingCardUpdateSchema } from '../middlewares/validation/testingCardSchema.js';
+import { testingCardCreateSchema, testingCardUpdateSchema } from '../../testingCardSchema.js';
 import ApiError from '../utils/ApiError.js';
 
 class TestingCard {

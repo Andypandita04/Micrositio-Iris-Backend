@@ -1,7 +1,7 @@
 // src/services/testingCardService.js
 import SecuenciaRepository from '../repositories/secuenciaRepository.js';
 import EmpleadoRepository from '../repositories/empleadoRepository.js';
-import TestingCardRepository from '../repositories/testingCardRepository.js';
+import TestingCardRepository from '../../testingCardRepository.js';
 import ExperimentoTipoRepository from '../repositories/experimentoTipoRepository.js';
 
 

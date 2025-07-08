@@ -1,7 +1,7 @@
 // src/controllers/testingCardController.js
-import TestingCardService from '../services/testingCardService.js';
-import { testingCardCreateSchema, testingCardUpdateSchema } from '../middlewares/validation/testingCardSchema.js';
-import ApiError from '../utils/ApiError.js';
+import TestingCardService from './src/services/testingCardService.js';
+import { testingCardCreateSchema, testingCardUpdateSchema } from './testingCardSchema.js';
+import ApiError from './src/utils/ApiError.js';
 
 class TestingCardController {
   constructor() {
