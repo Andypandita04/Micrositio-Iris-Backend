@@ -29,23 +29,23 @@ router.get('/', proyectoController.listarProyectos.bind(proyectoController));
 
 /**
  * Ruta GET para obtener un proyecto específico por ID.
- * @name get/proyectos/:id
+ * @name get/proyectos/
  * @function
  */
-router.get('/:id', proyectoController.obtenerProyecto.bind(proyectoController));
+router.get('/proyecto', proyectoController.obtenerProyecto.bind(proyectoController));
 
 /**
  * Ruta PATCH para actualizar un proyecto existente.
- * @name patch/proyectos/:id
+ * @name patch/proyectos/
  * @function
  */
-router.patch('/:id', proyectoController.actualizarProyecto.bind(proyectoController));
+router.patch('/', proyectoController.actualizarProyecto.bind(proyectoController));
 
 /**
  * Ruta DELETE para eliminar un proyecto existente.
- * @name delete/proyectos/:id
+ * @name delete/proyectos/
  * @function
  */
-router.delete('/:id', proyectoController.eliminarProyecto.bind(proyectoController));
+router.delete('/', proyectoController.eliminarProyecto.bind(proyectoController));
 
 export default router;
