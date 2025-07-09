@@ -47,9 +47,9 @@ class TestingCardController {
     }
   }
 
-  async obtenerTodos(req, res, next) {
+  async listarTodos(req, res, next) {
     try {
-      const testingCards = await this.testingCardService.obtenerTodos();
+      const testingCards = await this.testingCardService.listarTodos();
       res.json(testingCards);
     } catch (error) {
       next(error);

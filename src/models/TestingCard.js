@@ -1,101 +1,78 @@
-// src/repositories/testingCardRepository.js
-import supabase from '../config/supabaseClient.js';
+// src/models/TestingCard.js
+import { testingCardCreateSchema, testingCardUpdateSchema } from '../middlewares/validation/testingCardSchema.js';
 import ApiError from '../utils/ApiError.js';
-import TestingCard from '../models/TestingCard.js';
 
-class TestingCardRepository {
-  async obtenerPorId(id_testing_card) {
-    const { data, error } = await supabase
-      .from('testing_card')
-      .select('*')
-      .eq('id_testing_card', id_testing_card)
-      .single();
-
-    if (error && error.code !== 'PGRST116') {
-      throw new ApiError(`Error al obtener testing card: ${error.message}`, 500);
-    }
-
-    return data ? TestingCard.fromDatabase(data) : null;
+class TestingCard {
+  constructor(data) {
+    this.id_testing_card = data.id_testing_card;
+    this.id_secuencia = data.id_secuencia;
+    this.padre_id = data.padre_id || null;
+    this.titulo = data.titulo;
+    this.hipotesis = data.hipotesis;
+    this.id_experimento_tipo = data.id_experimento_tipo;
+    this.descripcion = data.descripcion;
+    this.dia_inicio = new Date(data.dia_inicio);
+    this.dia_fin = new Date(data.dia_fin);
+    this.anexo_url = data.anexo_url || null;
+    this.id_responsable = data.id_responsable;
+    this.status = data.status || 'En desarrollo';
+    this.created_at = new Date(data.created_at || Date.now());
+    this.updated_at = new Date(data.updated_at || Date.now());
   }
 
-  async obtenerPorSecuencia(id_secuencia) {
-    const { data, error } = await supabase
-      .from('testing_card')
-      .select('*')
-      .eq('id_secuencia', id_secuencia);
-
-    if (error) {
-      throw new ApiError(`Error al obtener testing cards por secuencia: ${error.message}`, 500);
+  static validateCreate(data) {
+    try {
+      return testingCardCreateSchema.parse(data);
+    } catch (error) {
+      throw new ApiError(`Validación fallida: ${error.errors.map(e => e.message).join(', ')}`, 400);
     }
-
-    return data.map(item => TestingCard.fromDatabase(item));
   }
 
-  async obtenerPorPadre(padre_id) {
-    const { data, error } = await supabase
-      .from('testing_card')
-      .select('*')
-      .eq('padre_id', padre_id);
-
-    if (error) {
-      throw new ApiError(`Error al obtener testing cards por padre: ${error.message}`, 500);
+  static validateUpdate(data) {
+    try {
+      return testingCardUpdateSchema.parse(data);
+    } catch (error) {
+      throw new ApiError(`Validación fallida: ${error.errors.map(e => e.message).join(', ')}`, 400);
     }
-
-    return data.map(item => TestingCard.fromDatabase(item));
   }
 
-  async obtenerTodos() {
-    const { data, error } = await supabase
-      .from('testing_card')
-      .select('*');
-
-    if (error) {
-      throw new ApiError(`Error al obtener todas las testing cards: ${error.message}`, 500);
-    }
-
-    return data.map(item => TestingCard.fromDatabase(item));
+  static fromDatabase(dbData) {
+    return new TestingCard({
+      id_testing_card: dbData.id_testing_card,
+      id_secuencia: dbData.id_secuencia,
+      padre_id: dbData.padre_id,
+      titulo: dbData.titulo,
+      hipotesis: dbData.hipotesis,
+      id_experimento_tipo: dbData.id_experimento_tipo,
+      descripcion: dbData.descripcion,
+      dia_inicio: dbData.dia_inicio,
+      dia_fin: dbData.dia_fin,
+      anexo_url: dbData.anexo_url,
+      id_responsable: dbData.id_responsable,
+      status: dbData.status,
+      created_at: dbData.created_at,
+      updated_at: dbData.updated_at
+    });
   }
 
-  async crear(testingCardData) {
-    const { data, error } = await supabase
-      .from('testing_card')
-      .insert(testingCardData)
-      .select();
-
-    if (error) {
-      throw new ApiError(`Error al crear testing card: ${error.message}`, 500);
-    }
-
-    return TestingCard.fromDatabase(data[0]);
-  }
-
-  async actualizar(id_testing_card, testingCardData) {
-    const { data, error } = await supabase
-      .from('testing_card')
-      .update(testingCardData)
-      .eq('id_testing_card', id_testing_card)
-      .select();
-
-    if (error) {
-      throw new ApiError(`Error al actualizar testing card: ${error.message}`, 500);
-    }
-
-    return data ? TestingCard.fromDatabase(data[0]) : null;
-  }
-
-  async eliminar(id_testing_card) {
-    const { data, error } = await supabase
-      .from('testing_card')
-      .delete()
-      .eq('id_testing_card', id_testing_card)
-      .select();
-
-    if (error) {
-      throw new ApiError(`Error al eliminar testing card: ${error.message}`, 500);
-    }
-
-    return data ? TestingCard.fromDatabase(data[0]) : null;
+  toAPI() {
+    return {
+      id: this.id_testing_card,
+      id_secuencia: this.id_secuencia,
+      padre_id: this.padre_id,
+      titulo: this.titulo,
+      hipotesis: this.hipotesis,
+      id_experimento_tipo: this.id_experimento_tipo,
+      descripcion: this.descripcion,
+      dia_inicio: this.dia_inicio.toISOString().split('T')[0],
+      dia_fin: this.dia_fin.toISOString().split('T')[0],
+      anexo_url: this.anexo_url,
+      id_responsable: this.id_responsable,
+      status: this.status,
+      creado: this.created_at.toISOString(),
+      actualizado: this.updated_at.toISOString()
+    };
   }
 }
 
-export default TestingCardRepository;
+export default TestingCard;

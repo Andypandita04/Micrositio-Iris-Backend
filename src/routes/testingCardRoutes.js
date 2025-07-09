@@ -12,7 +12,7 @@ router.get('/t', testingCardController.obtenerPorId.bind(testingCardController))
 router.get('/s', testingCardController.obtenerPorSecuencia.bind(testingCardController));
 
 // Obtener todos
-router.get('/', testingCardController.obtenerTodos.bind(testingCardController));
+router.get('/', testingCardController.listarTodos.bind(testingCardController));
 
 // Obtener por padre
 router.get('/padre', testingCardController.obtenerPorPadre.bind(testingCardController));
