@@ -6,6 +6,7 @@ import celulaProyectoRoutes from './routes/celulaProyectoRoutes.js';
 import empleadoRoutes from './routes/empleadoRoutes.js'; 
 import secuenciaRoutes from './routes/secuenciaRoutes.js';
 import categotiaRoutes from './routes/categoriaRoutes.js'
+import experimentosTipoRoutes from './routes/experimentoTipoRoutes.js'
 //import testingCardRoutes from './routes/testingCardRoutes.js';
 import errorHandler from './middlewares/errorHandler.js';
 import bodyParser from 'body-parser'; 
@@ -28,7 +29,8 @@ app.use('/proyectos', proyectoRoutes);
 app.use('/celula_proyectos', celulaProyectoRoutes);
 app.use('/empleados', empleadoRoutes);
 app.use('/secuencias', secuenciaRoutes);
-app.use('/categorias', categotiaRoutes)
+app.use('/categorias', categotiaRoutes);
+app.use('/experimento_tipo', experimentosTipoRoutes);
 //app.use('/testing_card', testingCardRoutes)
 
 // Ruta básica de prueba

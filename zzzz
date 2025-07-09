@@ -1,76 +1,20 @@
 ### **Contexto**  
-Bajo el mismo proyecto y manteniendo coherencia con la estructura existente de "categoria", "empleados", etc. Necesito implementar  endpoints para la tabla `proyecto`:  
-- **GET** `/proyectos/p`: Obtener por id_proyectos en el body
-- **GET** `/proyectos`: Obtener por id_proyectos en el body
-- **POST** `/proyectos`: Crear registro con titulo obligatorio y id_lider obligaotorioa. Sino viene categoria poner por defecto la uqe tiene id "1"
-- **DELETE** `/proyectos`: Eliminar tipo de experimiento por id_proyecto en el body
-- **PATCH** `/proyectos`: Para modificar por id_proyecto en el body
+Bajo el mismo proyecto y manteniendo coherencia con la estructura existente de "proyectos", "empleados", etc. Necesito implementar  endpoints para la tabla `experimento_tipo`:  
+- **GET** `/experimento_tipo/e`: Obtener por id_experimento_tipo en el body
+- **GET** `/experimento_tipo`: Obtener TODOS
+- **POST** `/experimento_tipo`: Crear registro 
+- **DELETE** `/experimento_tipo`: Eliminar registro
+- **PATCH** `/experimento_tipo`: Para modificar tipo o nombre o icono
 
 **Datos clave**:  
 - Estructura de la tabla:  
   ```sql
-CREATE TABLE proyecto (
-  id_proyecto SERIAL PRIMARY KEY,
-  titulo VARCHAR(50) NOT NULL,
-  descripcion TEXT,
-  estado VARCHAR(10) DEFAULT 'ACTIVO' CHECK (estado IN ('ACTIVO', 'INACTIVO', 'COMPLETADO')),
-  fecha_inicio DATE,
-  fecha_fin_estimada DATE,
-  id_categoria INTEGER NOT NULL,
-  id_lider INTEGER,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  
-  -- Restricción para categoría
-  CONSTRAINT fk_proyecto_categoria
-    FOREIGN KEY (id_categoria)
-    REFERENCES categoria(id_categoria)
-    ON DELETE RESTRICT,
-    
-  -- Restricción para líder (empleado)
-  CONSTRAINT fk_proyecto_lider
-    FOREIGN KEY (id_lider)
-    REFERENCES empleado(id_empleado)
-    ON DELETE SET NULL,
-    
-  -- Restricción adicional para fechas
-  CONSTRAINT chk_fechas_validas
-    CHECK (fecha_fin_estimada IS NULL OR fecha_inicio IS NULL OR fecha_fin_estimada >= fecha_inicio)
+CREATE TABLE experimento_tipo (
+    id_experimento_tipo SERIAL PRIMARY KEY,
+    tipo VARCHAR(20) NOT NULL CHECK (tipo IN ('DESCUBRIMIENTO', 'VALIDACION')),
+    nombre VARCHAR(50) NOT NULL UNIQUE,
+    icono VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
 );
 
-###*Requisitos:*
-
-Mantener arquitectura limpia como en el zip
-
-Código documentado en español (comentarios + JSDoc).
-
-Validar datos con middleware
-
-####*Rol del Modelo*
-Actúa como arquitecto backend senior con 10+ años en Node.js, experto en:
-
-Diseño de APIs REST con Express.
-
-Documentación clara y didáctica.
-
-###*Instrucciones*
-Análisis Inicial (al recibir lo archivos):
-
-Identificar estructura de capas actual y
-
-Revisar convenciones (ej: nombrado de archivos, manejo de errores).
-
-Implementación por Endpoint
-
-Documentación:
-
-Usar JSDoc en cada función:
-
-javascript
-/**
- * Obtiene empleados asignados a un proyecto
- * @param {number} id_proyecto - ID del proyecto
- * @returns {Promise<Array>} Lista de empleados_proyecto
- * @throws {Error} Si el proyecto no existe
- */
-Comentar lógica compleja (ej: transacciones SQL).
