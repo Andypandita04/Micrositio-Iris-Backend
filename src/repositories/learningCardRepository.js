@@ -15,13 +15,18 @@ class LearningCardRepository {
       .from('learning_card')
       .select('*')
       .eq('id_testing_card', idTestingCard)
-      .maybeSingle();
+      .maybeSingle(); // Usamos maybeSingle para obtener 0 o 1 registro
 
     if (error) {
       throw new ApiError(`Error al obtener learning card: ${error.message}`, 500);
     }
 
-    return data ? new LearningCard(data) : null;
+    // Verificación explícita de datos
+    if (!data || Object.keys(data).length === 0) {
+      return null;
+    }
+
+    return new LearningCard(data);
   }
 
   /**
@@ -93,6 +98,11 @@ class LearningCardRepository {
    * @throws {ApiError} Si ocurre un error
    */
   async actualizar(id, updateData) {
+    // Validar que el ID es un número positivo
+    if (!Number.isInteger(id) || id <= 0) {
+      throw new ApiError('ID de learning card inválido', 400);
+    }
+
     const { data, error } = await supabase
       .from('learning_card')
       .update(updateData)

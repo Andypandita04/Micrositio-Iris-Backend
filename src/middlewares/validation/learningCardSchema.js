@@ -7,6 +7,9 @@ export const learningCardCreateSchema = z.object({
 });
 
 export const learningCardUpdateSchema = z.object({
+  id_learning_card: z.number().int().positive().optional(),
   resultado: z.string().optional(),
   hallazgo: z.string().optional()
+}).refine(data => data.resultado !== undefined || data.hallazgo !== undefined, {
+  message: 'Debe proporcionar al menos resultado o hallazgo para actualizar'
 });

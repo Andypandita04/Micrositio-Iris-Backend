@@ -6,13 +6,15 @@ import { learningCardCreateSchema, learningCardUpdateSchema } from '../middlewar
 import ApiError from '../utils/ApiError.js';
 
 class LearningCard {
-  constructor(data) {
-    this.id = data.id;
-    this.id_testing_card = data.id_testing_card;
+  constructor(data = {}) { // Valor por defecto para data
+    // Asignamos valores por defecto para todas las propiedades
+    this.id = data.id || null;
+    this.id_secuencia = data.id_secuencia || null;
+    this.id_testing_card = data.id_testing_card || null;
     this.resultado = data.resultado || null;
     this.hallazgo = data.hallazgo || null;
-    this.created_at = new Date(data.created_at || Date.now());
-    this.updated_at = new Date(data.updated_at || Date.now());
+    this.created_at = data.created_at ? new Date(data.created_at) : new Date();
+    this.updated_at = data.updated_at ? new Date(data.updated_at) : new Date();
   }
 
   /**

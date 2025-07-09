@@ -15,20 +15,32 @@ class LearningCardService {
    * @returns {Promise<Object>} Learning card encontrada
    * @throws {ApiError} Si no existe testing card o learning card
    */
-  async obtenerPorTestingCard(idTestingCard) {
+    async obtenerPorTestingCard(idTestingCard) {
+    // Validar que el ID es un número válido
+    if (!Number.isInteger(idTestingCard)) {
+        throw new ApiError('ID de testing card inválido', 400);
+    }
+
     // Verificar que existe la testing card
     const testingCard = await this.testingCardRepo.obtenerPorId(idTestingCard);
     if (!testingCard) {
-      throw new ApiError('Testing card no encontrada', 404);
+        throw new ApiError('Testing card no encontrada', 404);
     }
 
+    // Obtener learning card
     const learningCard = await this.learningCardRepo.obtenerPorTestingCard(idTestingCard);
     if (!learningCard) {
-      throw new ApiError('No existe learning card para esta testing card', 404);
+        throw new ApiError('No existe learning card para esta testing card', 404);
+    }
+
+    // Verificar que la learning card tiene datos válidos
+    if (!learningCard.id) {
+        throw new ApiError('Datos de learning card inválidos', 500);
     }
 
     return learningCard.toAPI();
-  }
+    }
+
 
   /**
    * Obtiene learning card por ID
@@ -82,10 +94,15 @@ class LearningCardService {
    * @returns {Promise<Object>} Learning card actualizada
    * @throws {ApiError} Si no existe
    */
-  async actualizar(id, updateData) {
-    const learningCard = await this.learningCardRepo.actualizar(id, updateData);
-    return learningCard.toAPI();
-  }
+    async actualizar(id, updateData) {
+        // Validación adicional del ID
+        if (!Number.isInteger(id)) {
+            throw new ApiError('ID de learning card inválido', 400);
+        }
+
+        const learningCard = await this.learningCardRepo.actualizar(id, updateData);
+        return learningCard.toAPI();
+    }
 
   /**
    * Elimina una learning card
