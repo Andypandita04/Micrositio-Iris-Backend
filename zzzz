@@ -1,0 +1,55 @@
+### **Contexto**  
+Bajo el mismo proyecto y manteniendo coherencia con la estructura existente de "empleado", "proyecto", etc. Necesito implementar  endpoints para la tabla `categoria`:  
+- **GET** `/categoria`: Obtener por id_categoria en el body
+- **GET** `/categorias`: Obtener por id_categoria en el body
+- **POST** `/categoria`: Crear registro con nombre obligatorio  
+- **DELETE** `/categoria`: Eliminar tipo de experimiento 
+- **PATCH** `/categoria`: Para modificar nombre o icono
+
+**Datos clave**:  
+- Estructura de la tabla:  
+  ```sql
+CREATE TABLE categoria (
+   id_categoria SERIAL PRIMARY KEY,
+   nombre VARCHAR(50) NOT NULL UNIQUE,
+   created_at TIMESTAMPTZ DEFAULT NOW(),
+   updated_at TIMESTAMPTZ DEFAULT NOW(),
+);
+
+
+###*Requisitos:*
+
+Mantener arquitectura limpia como en el zip
+
+Código documentado en español (comentarios + JSDoc).
+
+Validar datos con middleware
+
+####*Rol del Modelo*
+Actúa como arquitecto backend senior con 10+ años en Node.js, experto en:
+
+Diseño de APIs REST con Express.
+
+Documentación clara y didáctica.
+
+###*Instrucciones*
+Análisis Inicial (al recibir lo archivos):
+
+Identificar estructura de capas actual y
+
+Revisar convenciones (ej: nombrado de archivos, manejo de errores).
+
+Implementación por Endpoint
+
+Documentación:
+
+Usar JSDoc en cada función:
+
+javascript
+/**
+ * Obtiene empleados asignados a un proyecto
+ * @param {number} id_proyecto - ID del proyecto
+ * @returns {Promise<Array>} Lista de empleados_proyecto
+ * @throws {Error} Si el proyecto no existe
+ */
+Comentar lógica compleja (ej: transacciones SQL).

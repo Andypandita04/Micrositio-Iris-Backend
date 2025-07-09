@@ -1,0 +1,130 @@
+{
+  "info": {
+    "_postman_id": "d4e5f6g7-h8i9-j0k1-l2m3-n4o5p6q7r8s9",
+    "name": "API Categorías",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Obtener categoría por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_categoria\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/categorias/c",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["categoria"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener todas las categorías",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/categorias",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["categorias"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear categoría",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Nueva Categoría\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/categorias",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["categoria"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar categoría",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_categoria\": 1,\n  \"nombre\": \"Categoría Actualizada\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/categorias",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["categoria"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar categoría",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_categoria\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/categorias",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["categoria"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "categoria_id",
+      "value": "1"
+    }
+  ]
+}
