@@ -1,21 +1,42 @@
 ### **Contexto**  
-Bajo el mismo proyecto y manteniendo coherencia con la estructura existente de "empleado", "proyecto", etc. Necesito implementar  endpoints para la tabla `categoria`:  
-- **GET** `/categoria`: Obtener por id_categoria en el body
-- **GET** `/categorias`: Obtener por id_categoria en el body
-- **POST** `/categoria`: Crear registro con nombre obligatorio  
-- **DELETE** `/categoria`: Eliminar tipo de experimiento 
-- **PATCH** `/categoria`: Para modificar nombre o icono
+Bajo el mismo proyecto y manteniendo coherencia con la estructura existente de "categoria", "empleados", etc. Necesito implementar  endpoints para la tabla `proyecto`:  
+- **GET** `/proyectos/p`: Obtener por id_proyectos en el body
+- **GET** `/proyectos`: Obtener por id_proyectos en el body
+- **POST** `/proyectos`: Crear registro con titulo obligatorio y id_lider obligaotorioa. Sino viene categoria poner por defecto la uqe tiene id "1"
+- **DELETE** `/proyectos`: Eliminar tipo de experimiento por id_proyecto en el body
+- **PATCH** `/proyectos`: Para modificar por id_proyecto en el body
 
 **Datos clave**:  
 - Estructura de la tabla:  
   ```sql
-CREATE TABLE categoria (
-   id_categoria SERIAL PRIMARY KEY,
-   nombre VARCHAR(50) NOT NULL UNIQUE,
-   created_at TIMESTAMPTZ DEFAULT NOW(),
-   updated_at TIMESTAMPTZ DEFAULT NOW(),
+CREATE TABLE proyecto (
+  id_proyecto SERIAL PRIMARY KEY,
+  titulo VARCHAR(50) NOT NULL,
+  descripcion TEXT,
+  estado VARCHAR(10) DEFAULT 'ACTIVO' CHECK (estado IN ('ACTIVO', 'INACTIVO', 'COMPLETADO')),
+  fecha_inicio DATE,
+  fecha_fin_estimada DATE,
+  id_categoria INTEGER NOT NULL,
+  id_lider INTEGER,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  
+  -- Restricción para categoría
+  CONSTRAINT fk_proyecto_categoria
+    FOREIGN KEY (id_categoria)
+    REFERENCES categoria(id_categoria)
+    ON DELETE RESTRICT,
+    
+  -- Restricción para líder (empleado)
+  CONSTRAINT fk_proyecto_lider
+    FOREIGN KEY (id_lider)
+    REFERENCES empleado(id_empleado)
+    ON DELETE SET NULL,
+    
+  -- Restricción adicional para fechas
+  CONSTRAINT chk_fechas_validas
+    CHECK (fecha_fin_estimada IS NULL OR fecha_inicio IS NULL OR fecha_fin_estimada >= fecha_inicio)
 );
-
 
 ###*Requisitos:*
 
