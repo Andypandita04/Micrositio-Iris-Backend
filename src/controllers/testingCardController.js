@@ -1,20 +1,17 @@
 // src/controllers/testingCardController.js
-import TestingCardService from './src/services/testingCardService.js';
-import { testingCardCreateSchema, testingCardUpdateSchema } from './testingCardSchema.js';
-import ApiError from './src/utils/ApiError.js';
+import TestingCardService from '../services/testingCardService.js';
+import { testingCardCreateSchema, testingCardUpdateSchema } from '../middlewares/validation/testingCardSchema.js';
+import ApiError from '../utils/ApiError.js';
 
 class TestingCardController {
   constructor() {
     this.testingCardService = new TestingCardService();
   }
 
-  /**
-   * Obtiene una testing card por ID
-   */
   async obtenerPorId(req, res, next) {
     try {
       if (!req.body.id_testing_card) {
-        throw new ApiError('Se requiere el campo id_testing_card', 400);
+        throw new ApiError('Se requiere el campo "id_testing_card" en el body', 400);
       }
 
       const testingCard = await this.testingCardService.obtenerPorId(req.body.id_testing_card);
@@ -24,13 +21,10 @@ class TestingCardController {
     }
   }
 
-  /**
-   * Obtiene testing cards por secuencia
-   */
   async obtenerPorSecuencia(req, res, next) {
     try {
       if (!req.body.id_secuencia) {
-        throw new ApiError('Se requiere el campo id_secuencia', 400);
+        throw new ApiError('Se requiere el campo "id_secuencia" en el body', 400);
       }
 
       const testingCards = await this.testingCardService.obtenerPorSecuencia(req.body.id_secuencia);
@@ -40,21 +34,28 @@ class TestingCardController {
     }
   }
 
-  /**
-   * Obtiene todas las testing cards
-   */
-  async obtenerTodas(req, res, next) {
+  async obtenerPorPadre(req, res, next) {
     try {
-      const testingCards = await this.testingCardService.obtenerTodas();
+      if (!req.body.padre_id) {
+        throw new ApiError('Se requiere el campo "padre_id" en el body', 400);
+      }
+
+      const testingCards = await this.testingCardService.obtenerPorPadre(req.body.padre_id);
       res.json(testingCards);
     } catch (error) {
       next(error);
     }
   }
 
-  /**
-   * Crea una nueva testing card
-   */
+  async obtenerTodos(req, res, next) {
+    try {
+      const testingCards = await this.testingCardService.obtenerTodos();
+      res.json(testingCards);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async crear(req, res, next) {
     try {
       const validatedData = testingCardCreateSchema.parse(req.body);
@@ -65,18 +66,14 @@ class TestingCardController {
     }
   }
 
-  /**
-   * Actualiza una testing card
-   */
   async actualizar(req, res, next) {
     try {
       if (!req.body.id_testing_card) {
-        throw new ApiError('Se requiere el campo id_testing_card', 400);
+        throw new ApiError('Se requiere el campo "id_testing_card" en el body', 400);
       }
 
       const { id_testing_card, ...updateData } = req.body;
       const validatedData = testingCardUpdateSchema.parse(updateData);
-      
       const testingCard = await this.testingCardService.actualizar(id_testing_card, validatedData);
       res.json(testingCard);
     } catch (error) {
@@ -84,13 +81,10 @@ class TestingCardController {
     }
   }
 
-  /**
-   * Elimina una testing card
-   */
   async eliminar(req, res, next) {
     try {
       if (!req.body.id_testing_card) {
-        throw new ApiError('Se requiere el campo id_testing_card', 400);
+        throw new ApiError('Se requiere el campo "id_testing_card" en el body', 400);
       }
 
       await this.testingCardService.eliminar(req.body.id_testing_card);

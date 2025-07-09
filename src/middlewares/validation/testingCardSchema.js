@@ -18,7 +18,7 @@ export const testingCardCreateSchema = z.object({
   dia_inicio: z.coerce.date().optional(),
   dia_fin: z.coerce.date().optional(),
   anexo_url: z.string().url().optional(),
-  id_empleado: z.number().int().positive().optional(),
+  id_empleado: z.number().int().positive(),
   status: z.enum(['En desarrollo', 'En validación', 'En ejecución', 'Cancelado', 'Terminado'])
     .optional()
     .default('En desarrollo')

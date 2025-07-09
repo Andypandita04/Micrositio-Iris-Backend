@@ -1,20 +1,28 @@
 ### **Contexto**  
-Bajo el mismo proyecto y manteniendo coherencia con la estructura existente de "proyectos", "empleados", etc. Necesito implementar  endpoints para la tabla `experimento_tipo`:  
-- **GET** `/experimento_tipo/e`: Obtener por id_experimento_tipo en el body
-- **GET** `/experimento_tipo`: Obtener TODOS
-- **POST** `/experimento_tipo`: Crear registro 
-- **DELETE** `/experimento_tipo`: Eliminar registro
-- **PATCH** `/experimento_tipo`: Para modificar tipo o nombre o icono
+Bajo el mismo proyecto y manteniendo coherencia con la estructura existente de "proyectos", "empleados", etc. Necesito implementar  endpoints para la tabla `metrica_testing_card`:  
+- **GET** `/metrica_testing_card/p`: Obtener por id_proyecto en el body. Si no existe proyecto, indicarlo como error
+- **GET** `/metrica_testing_card/s`: Obtener por id_metrica_testing_card en el body. Si no existe secuecnia, indicarlo como error
+- **GET** `/metrica_testing_card`: Obtener TODOS
+- **POST** `/metrica_testing_card`: Crear registro . Indicar si no existe el proyecto , el testing card
+- **DELETE** `/metrica_testing_card`: Eliminar registro
+- **PATCH** `/metrica_testing_card`: Para modificar nombre, descripcion, id_testing_card
+
+Si no existe proyecto, indicarlo como error
 
 **Datos clave**:  
 - Estructura de la tabla:  
   ```sql
-CREATE TABLE experimento_tipo (
-    id_experimento_tipo SERIAL PRIMARY KEY,
-    tipo VARCHAR(20) NOT NULL CHECK (tipo IN ('DESCUBRIMIENTO', 'VALIDACION')),
-    nombre VARCHAR(50) NOT NULL UNIQUE,
-    icono VARCHAR(50),
+
+CREATE TABLE metrica_testing_card (
+    id_metrica SERIAL PRIMARY KEY,
+    id_testing_card INTEGER NOT NULL,
+    nombre VARCHAR(20) NOT NULL,
+    operador VARCHAR(10) NOT NULL,
+    criterio TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT fk_testing_card 
+        FOREIGN KEY (id_testing_card) 
+        REFERENCES testing_card(id_testing_card)
+        ON DELETE CASCADE  -- Opcional: borra métricas si se borra la testing card
 );
-
