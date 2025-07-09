@@ -1,0 +1,150 @@
+{
+  "info": {
+    "_postman_id": "d4e5f6g7-h8i9-j0k1-l2m3n4o5p6q7",
+    "name": "API Celula_Proyecto",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Obtener por empleado",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_empleado\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/celula_proyectos/e",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["celula_proyecto", "e"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener por proyecto",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_proyecto\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/celula_proyectos/p",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["celula_proyecto", "p"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener todos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/celula_proyectos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["celula_proyecto"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear relación",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_empleado\": 1,\n  \"id_proyecto\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/celula_proyectos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["celula_proyecto"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar relación",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/celula_proyectos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["celula_proyecto"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar activo",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 1,\n  \"activo\": false\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/celula_proyectos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["celula_proyecto"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    }
+  ]
+}

@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import proyectoRoutes from './routes/proyectoRoutes.js';
-import empleadoProyectoRoutes from './routes/empleadoProyectoRoutes.js';
+import celulaProyectoRoutes from './routes/celulaProyectoRoutes.js';
 import empleadoRoutes from './routes/empleadoRoutes.js'; 
 import secuenciaRoutes from './routes/secuenciaRoutes.js';
 import categotiaRoutes from './routes/categoriaRoutes.js'
@@ -25,7 +25,7 @@ app.use(express.json());
 
 // Rutas
 app.use('/proyectos', proyectoRoutes);
-app.use('/', empleadoProyectoRoutes);
+app.use('/celula_proyectos', celulaProyectoRoutes);
 app.use('/empleados', empleadoRoutes);
 app.use('/secuencias', secuenciaRoutes);
 app.use('/categorias', categotiaRoutes)
