@@ -11,7 +11,7 @@ class SecuenciaController {
     const secuenciaRepository = new SecuenciaRepository();
     const proyectoRepository = new ProyectoRepository();
     const testingCardRepository = new TestingCardRepository();
-    
+
     this.secuenciaService = new SecuenciaService(
       secuenciaRepository,
       proyectoRepository,
@@ -27,12 +27,15 @@ class SecuenciaController {
    */
   async obtenerPorProyecto(req, res, next) {
     try {
-      if (!req.body.id_proyecto) {
-        throw new ApiError('Se requiere el campo "id_proyecto" en el body', 400);
+      // Leer desde query params en lugar de body
+      const id_proyecto = Number(req.query.id_proyecto);
+
+      if (!id_proyecto) {
+        throw new ApiError('Se requiere el parámetro "id_proyecto"', 400);
       }
 
-      const secuencias = await this.secuenciaService.obtenerPorProyecto(req.body.id_proyecto);
-      res.json(secuencias.map(sec => sec.toAPI()));
+      const secuencias = await this.secuenciaService.obtenerPorProyecto(id_proyecto);
+      res.json(secuencias);
     } catch (error) {
       next(error);
     }

@@ -16,11 +16,11 @@ class ProyectoController {
    */
   async obtenerProyecto(req, res, next) {
     try {
-      if (!req.body.id_proyecto) {
+      const id_proyecto = Number(req.body.id_proyecto);
+      if (!id_proyecto) {
         throw new ApiError('Se requiere el campo "id_proyecto" en el body', 400);
       }
-
-      const proyecto = await this.proyectoService.obtenerProyecto(req.body.id_proyecto);
+      const proyecto = await this.proyectoService.obtenerProyecto(id_proyecto);
       res.json(proyecto);
     } catch (error) {
       next(error);
@@ -41,7 +41,7 @@ class ProyectoController {
     } catch (error) {
       next(error);
     }
-    
+
   }
 
   /**

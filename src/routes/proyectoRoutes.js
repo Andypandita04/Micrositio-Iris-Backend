@@ -11,6 +11,7 @@ router.get('/', proyectoController.listarProyectos.bind(proyectoController));
 // Obtener proyecto específico
 router.get('/p', proyectoController.obtenerProyecto.bind(proyectoController));
 
+router.post('/p', proyectoController.obtenerProyecto.bind(proyectoController));
 // Crear proyecto
 router.post('/', proyectoController.crearProyecto.bind(proyectoController));
 
