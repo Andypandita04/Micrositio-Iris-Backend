@@ -17,8 +17,9 @@ class Secuencia {
     this.id_testing_card_padre = data.id_testing_card_padre;
     this.nombre = data.nombre;
     this.descripcion = data.descripcion || null;
-    this.created_at = new Date(data.created_at || Date.now());
-    this.updated_at = new Date(data.updated_at || Date.now());
+    this.created_at = data.created_at ? new Date(data.created_at) : new Date();
+    this.updated_at = data.updated_at ? new Date(data.updated_at) : new Date();
+    this.estado = data.estado || 'activa';
   }
 
   /**
@@ -51,19 +52,19 @@ class Secuencia {
     }
   }
 
-  /**
+   /**
    * Convierte el modelo a un objeto para la respuesta API.
    * @returns {Object} Objeto preparado para la respuesta.
    */
   toAPI() {
     return {
-      id: this.id_secuencia,
-      id_proyecto: this.id_proyecto,
-      id_testing_card_padre: this.id_testing_card_padre,
-      nombre: this.nombre,
-      descripcion: this.descripcion,
-      creado: this.created_at.toISOString(),
-      actualizado: this.updated_at.toISOString()
+      id: this.id_secuencia?.toString() ?? '',
+      nombre: this.nombre ?? '',
+      descripcion: this.descripcion ?? '',
+      proyectoId: this.id_proyecto?.toString() ?? '',
+      fechaCreacion: this.created_at ? this.created_at.toISOString() : '',
+      estado: this.estado ?? 'activa',
+      // Si necesitas otros campos, agrégalos aquí
     };
   }
 }
