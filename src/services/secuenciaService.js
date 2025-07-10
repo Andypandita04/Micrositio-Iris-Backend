@@ -67,10 +67,10 @@ class SecuenciaService {
     }
 
     // Verificar que el testing card existe
-    const testingCard = await this.testingCardRepo.obtenerPorId(secuenciaData.id_testing_card_padre);
-    if (!testingCard) {
-      throw new ApiError('Testing card no encontrado', 404);
-    }
+    //const testingCard = await this.testingCardRepo.obtenerPorId(secuenciaData.id_testing_card_padre);
+    //if (!testingCard) {
+    //  throw new ApiError('Testing card no encontrado', 404);
+    //}
 
     const secuencia = await this.secuenciaRepo.crear(secuenciaData);
     return secuencia.toAPI();
