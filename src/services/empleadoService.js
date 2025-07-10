@@ -24,12 +24,21 @@ class EmpleadoService {
    */
   async obtenerPorId(id) {
     const empleado = await this.empleadoRepo.obtenerPorId(id);
-    
+
     if (!empleado) {
       throw new ApiError('Empleado no encontrado', 404);
     }
-    
+
     return empleado.toAPI();
+  }
+
+  /**
+   * Obtiene todos los empleados.
+   * @async
+   * @returns {Promise<Array<Object>>} Lista de empleados.
+   */
+  async listarTodos() {
+    return await this.empleadoRepo.listarTodos();
   }
 
   /**
@@ -55,11 +64,11 @@ class EmpleadoService {
   async actualizar(id, empleadoData) {
     const datosValidados = Empleado.validateUpdate(empleadoData);
     const empleado = await this.empleadoRepo.actualizar(id, datosValidados);
-    
+
     if (!empleado) {
       throw new ApiError('Empleado no encontrado', 404);
     }
-    
+
     return empleado.toAPI();
   }
 
@@ -72,11 +81,11 @@ class EmpleadoService {
    */
   async desactivar(id) {
     const empleado = await this.empleadoRepo.desactivar(id);
-    
+
     if (!empleado) {
       throw new ApiError('Empleado no encontrado', 404);
     }
-    
+
     return empleado.toAPI();
   }
 }

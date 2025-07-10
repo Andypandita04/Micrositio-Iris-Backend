@@ -38,4 +38,11 @@ router.patch('/', empleadoController.actualizar.bind(empleadoController));
  */
 router.delete('/', empleadoController.desactivar.bind(empleadoController));
 
+/**
+ * Ruta GET para obtener todos los empleados.
+ * @name get/empleados/todos
+ * @function
+ */
+router.get('/todos', empleadoController.listarTodos.bind(empleadoController));
+
 export default router;
