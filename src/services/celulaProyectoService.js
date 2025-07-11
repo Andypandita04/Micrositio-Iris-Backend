@@ -97,7 +97,26 @@ class CelulaProyectoService {
     return nuevaRelacion.toAPI();
   }
 
-  // ... (otros métodos permanecen igual)
+  async crearMultiple(idEmpleados, idProyecto, activo = true) {
+    if (!Array.isArray(idEmpleados) || idEmpleados.length === 0) {
+      throw new ApiError('Debe proporcionar al menos un id_empleado', 400);
+    }
+    // Validar que todos los empleados existen
+    const empleados = await Promise.all(idEmpleados.map(id => this.empleadoRepo.obtenerPorId(id)));
+    if (empleados.some(e => !e)) {
+      throw new ApiError('Uno o más empleados no existen', 404);
+    }
+    // Validar que el proyecto existe
+    const proyecto = await this.proyectoRepo.obtenerPorId(idProyecto);
+    if (!proyecto) {
+      throw new ApiError('El proyecto no existe', 404);
+    }
+    // Crear todas las relaciones
+    const relaciones = await this.celulaProyectoRepo.crearMultiple(
+      idEmpleados.map(id_empleado => ({ id_empleado, id_proyecto: idProyecto, activo }))
+    );
+    return relaciones.map(rel => rel.toAPI ? rel.toAPI() : rel);
+  }
 }
 
 export default CelulaProyectoService;

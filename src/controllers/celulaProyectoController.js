@@ -69,17 +69,19 @@ class CelulaProyectoController {
   }
 
   /**
-   * Crea una nueva relación célula-proyecto.
+   * Crea nuevas relaciones célula-proyecto para varios empleados.
    * @async
    * @param {Object} req - Request de Express.
    * @param {Object} res - Response de Express.
    * @param {Function} next - Next middleware.
    */
   async crear(req, res, next) {
+    console.log('Body recibido en crear celula_proyecto:', req.body);
     try {
       const validatedData = celulaProyectoCreateSchema.parse(req.body);
-      const nuevaRelacion = await this.celulaProyectoService.crear(validatedData);
-      res.status(201).json(nuevaRelacion);
+      const { id_empleados, id_proyecto, activo } = validatedData;
+      const nuevasRelaciones = await this.celulaProyectoService.crearMultiple(id_empleados, id_proyecto, activo);
+      res.status(201).json(nuevasRelaciones);
     } catch (error) {
       next(new ApiError(error.message, 400));
     }

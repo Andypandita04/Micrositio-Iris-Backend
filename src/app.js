@@ -28,7 +28,7 @@ app.use(express.json());
 
 // Rutas
 app.use('/proyectos', proyectoRoutes);
-app.use('/celula_proyectos', celulaProyectoRoutes);
+app.use('/celula_proyecto', celulaProyectoRoutes);
 app.use('/empleados', empleadoRoutes);
 app.use('/secuencias', secuenciaRoutes);
 app.use('/categorias', categotiaRoutes);
