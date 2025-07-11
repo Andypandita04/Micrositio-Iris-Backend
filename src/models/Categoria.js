@@ -54,10 +54,10 @@ class Categoria {
    */
   toAPI() {
     return {
-      id: this.id_categoria,
+      id_categoria: this.id_categoria,
       nombre: this.nombre,
-      creado: this.created_at.toISOString(),
-      actualizado: this.updated_at.toISOString()
+      created_at: this.created_at.toISOString(),
+      updated_at: this.updated_at.toISOString()
     };
   }
 }
