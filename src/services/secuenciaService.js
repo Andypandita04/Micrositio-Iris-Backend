@@ -92,7 +92,7 @@ async crear(secuenciaData) {
     }
 
     const secuencia = await this.secuenciaRepo.actualizar(id_secuencia, secuenciaData);
-    return secuencia.toAPI();
+    return secuencia; // <-- Ya es un objeto plano, no llames .toAPI()
   }
 
   /**
