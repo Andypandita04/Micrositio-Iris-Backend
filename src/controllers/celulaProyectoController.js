@@ -33,24 +33,27 @@ class CelulaProyectoController {
   }
 
   /**
-   * Obtiene relaciones por ID de proyecto.
+   * Obtiene relaciones por ID de proyecto (usando req.query).
    * @async
    * @param {Object} req - Request de Express.
    * @param {Object} res - Response de Express.
    * @param {Function} next - Next middleware.
    */
-  async obtenerPorProyecto(req, res, next) {
-    try {
-      if (!req.body.id_proyecto) {
-        throw new ApiError('Se requiere el campo "id_proyecto" en el body', 400);
-      }
+  // En src/controllers/celulaProyectoController.js
 
-      const relaciones = await this.celulaProyectoService.obtenerPorProyecto(req.body.id_proyecto);
-      res.json(relaciones);
-    } catch (error) {
-      next(error);
+async obtenerPorProyecto(req, res, next) {
+  try {
+    // Solo lee de la query para GET
+    const id_proyecto = req.query.id_proyecto;
+    if (!id_proyecto) {
+      throw new ApiError('Se requiere el parámetro "id_proyecto" en query', 400);
     }
+    const relaciones = await this.celulaProyectoService.obtenerPorProyecto(Number(id_proyecto));
+    res.json(relaciones);
+  } catch (error) {
+    next(error);
   }
+}
 
   /**
    * Obtiene todas las relaciones célula-proyecto.
