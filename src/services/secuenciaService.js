@@ -2,6 +2,7 @@
 import SecuenciaRepository from '../repositories/secuenciaRepository.js';
 import ProyectoRepository from '../repositories/proyectoRepository.js';
 import TestingCardRepository from '../repositories/testingCardRepository.js';
+import Secuencia from '../models/Secuencia.js'; 
 import ApiError from '../utils/ApiError.js';
 
 class SecuenciaService {
@@ -54,27 +55,26 @@ class SecuenciaService {
   }
 
   /**
-   * Crea una nueva secuencia
-   * @param {Object} secuenciaData - Datos de la secuencia
-   * @returns {Promise<Object>} Secuencia creada
-   * @throws {ApiError} Si proyecto o testing card no existen
-   */
-  async crear(secuenciaData) {
-    // Verificar que el proyecto existe
-    const proyecto = await this.proyectoRepo.obtenerPorId(secuenciaData.id_proyecto);
-    if (!proyecto) {
-      throw new ApiError('Proyecto no encontrado', 404);
-    }
-
-    // Verificar que el testing card existe
-    //const testingCard = await this.testingCardRepo.obtenerPorId(secuenciaData.id_testing_card_padre);
-    //if (!testingCard) {
-    //  throw new ApiError('Testing card no encontrado', 404);
-    //}
-
-    const secuencia = await this.secuenciaRepo.crear(secuenciaData);
-    return secuencia.toAPI();
+ * Crea una nueva secuencia
+ * @param {Object} secuenciaData - Datos de la secuencia
+ * @returns {Promise<Object>} Secuencia creada
+ * @throws {ApiError} Si proyecto o testing card no existen
+ */
+async crear(secuenciaData) {
+  // Verificar que el proyecto existe
+  const proyecto = await this.proyectoRepo.obtenerPorId(secuenciaData.id_proyecto);
+  if (!proyecto) {
+    throw new ApiError('Proyecto no encontrado', 404);
   }
+
+  // Verificar que el testing card existe (si aplica)
+  // const testingCard = await this.testingCardRepo.obtenerPorId(secuenciaData.id_testing_card_padre);
+  // if (!testingCard) {
+  //   throw new ApiError('Testing card no encontrado', 404);
+  // }
+
+  return await this.secuenciaRepo.crear(secuenciaData);
+}   
 
   /**
    * Actualiza una secuencia existente

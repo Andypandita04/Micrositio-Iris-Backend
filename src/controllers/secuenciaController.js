@@ -3,6 +3,7 @@ import SecuenciaService from '../services/secuenciaService.js';
 import SecuenciaRepository from '../repositories/secuenciaRepository.js';
 import ProyectoRepository from '../repositories/proyectoRepository.js';
 import TestingCardRepository from '../repositories/testingCardRepository.js';
+import Secuencia from '../models/Secuencia.js';
 import { secuenciaCreateSchema, secuenciaUpdateSchema } from '../middlewares/validation/secuenciaSchema.js';
 import ApiError from '../utils/ApiError.js';
 

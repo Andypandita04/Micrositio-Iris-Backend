@@ -1,6 +1,7 @@
 // src/routes/secuenciaRoutes.js
 import express from 'express';
 import SecuenciaController from '../controllers/secuenciaController.js';
+import Secuencia from '../models/Secuencia.js';
 
 const router = express.Router();
 const secuenciaController = new SecuenciaController();
