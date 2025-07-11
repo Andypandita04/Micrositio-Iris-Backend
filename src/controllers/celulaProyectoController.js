@@ -33,24 +33,27 @@ class CelulaProyectoController {
   }
 
   /**
-   * Obtiene relaciones por ID de proyecto.
+   * Obtiene relaciones por ID de proyecto (usando req.query).
    * @async
    * @param {Object} req - Request de Express.
    * @param {Object} res - Response de Express.
    * @param {Function} next - Next middleware.
    */
-  async obtenerPorProyecto(req, res, next) {
-    try {
-      if (!req.body.id_proyecto) {
-        throw new ApiError('Se requiere el campo "id_proyecto" en el body', 400);
-      }
+  // En src/controllers/celulaProyectoController.js
 
-      const relaciones = await this.celulaProyectoService.obtenerPorProyecto(req.body.id_proyecto);
-      res.json(relaciones);
-    } catch (error) {
-      next(error);
+async obtenerPorProyecto(req, res, next) {
+  try {
+    // Solo lee de la query para GET
+    const id_proyecto = req.query.id_proyecto;
+    if (!id_proyecto) {
+      throw new ApiError('Se requiere el parámetro "id_proyecto" en query', 400);
     }
+    const relaciones = await this.celulaProyectoService.obtenerPorProyecto(Number(id_proyecto));
+    res.json(relaciones);
+  } catch (error) {
+    next(error);
   }
+}
 
   /**
    * Obtiene todas las relaciones célula-proyecto.
@@ -69,17 +72,19 @@ class CelulaProyectoController {
   }
 
   /**
-   * Crea una nueva relación célula-proyecto.
+   * Crea nuevas relaciones célula-proyecto para varios empleados.
    * @async
    * @param {Object} req - Request de Express.
    * @param {Object} res - Response de Express.
    * @param {Function} next - Next middleware.
    */
   async crear(req, res, next) {
+    console.log('Body recibido en crear celula_proyecto:', req.body);
     try {
       const validatedData = celulaProyectoCreateSchema.parse(req.body);
-      const nuevaRelacion = await this.celulaProyectoService.crear(validatedData);
-      res.status(201).json(nuevaRelacion);
+      const { id_empleados, id_proyecto, activo } = validatedData;
+      const nuevasRelaciones = await this.celulaProyectoService.crearMultiple(id_empleados, id_proyecto, activo);
+      res.status(201).json(nuevasRelaciones);
     } catch (error) {
       next(new ApiError(error.message, 400));
     }

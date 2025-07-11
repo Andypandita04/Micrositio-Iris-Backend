@@ -17,12 +17,16 @@ const celulaProyectoController = new CelulaProyectoController();
  */
 router.get('/e', celulaProyectoController.obtenerPorEmpleado.bind(celulaProyectoController));
 
+router.post('/e', celulaProyectoController.obtenerPorEmpleado.bind(celulaProyectoController));
+
 /**
  * Obtiene relaciones por ID de proyecto.
  * @name get/celula_proyecto/p
  * @function
  */
 router.get('/p', celulaProyectoController.obtenerPorProyecto.bind(celulaProyectoController));
+
+router.post('/p', celulaProyectoController.obtenerPorProyecto.bind(celulaProyectoController));
 
 /**
  * Obtiene todas las relaciones célula-proyecto.

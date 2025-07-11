@@ -10,7 +10,7 @@ import { z } from 'zod';
  * Esquema para la creación de relaciones célula-proyecto.
  */
 const celulaProyectoCreateSchema = z.object({
-  id_empleado: z.number().int().positive('El ID del empleado debe ser un número positivo'),
+  id_empleados: z.array(z.number().int().positive('El ID del empleado debe ser un número positivo')),
   id_proyecto: z.number().int().positive('El ID del proyecto debe ser un número positivo'),
   activo: z.boolean().optional().default(true)
 });

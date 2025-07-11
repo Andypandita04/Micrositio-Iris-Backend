@@ -87,6 +87,24 @@ class CelulaProyectoRepository {
   }
 
   /**
+   * Crea múltiples relaciones célula-proyecto.
+   * @async
+   * @param {Array<Object>} relacionesData - Array de objetos { id_empleado, id_proyecto, activo }
+   * @returns {Promise<Array>} Relaciones creadas.
+   * @throws {ApiError} Si ocurre un error al crear.
+   */
+  async crearMultiple(relacionesData) {
+    const { data, error } = await supabase
+      .from('celula_proyecto')
+      .insert(relacionesData)
+      .select();
+    if (error) {
+      throw new ApiError(`Error al crear relaciones: ${error.message}`, 500);
+    }
+    return data.map(item => new CelulaProyecto(item));
+  }
+
+  /**
    * Elimina una relación célula-proyecto.
    * @async
    * @param {number} id - ID de la relación a eliminar.
