@@ -1,27 +1,36 @@
 {
   "info": {
     "_postman_id": "d4e5f6g7-h8i9-j0k1-l2m3n4o5p6q7",
-    "name": "API Proyectos",
+    "name": "API Celula_Proyecto",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Obtener todos los proyectos",
+      "name": "Obtener por empleado",
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_empleado\": 1\n}"
+        },
         "url": {
-          "raw": "http://localhost:3000/proyectos",
+          "raw": "http://localhost:3000/celula_proyectos/e",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["proyectos"]
+          "path": ["celula_proyecto", "e"]
         }
       },
       "response": []
     },
     {
-      "name": "Obtener proyecto específico",
+      "name": "Obtener por proyecto",
       "request": {
         "method": "GET",
         "header": [
@@ -35,17 +44,32 @@
           "raw": "{\n  \"id_proyecto\": 1\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/proyectos/p",
+          "raw": "http://localhost:3000/celula_proyectos/p",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["proyectos", "p"]
+          "path": ["celula_proyecto", "p"]
         }
       },
       "response": []
     },
     {
-      "name": "Crear proyecto",
+      "name": "Obtener todos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/celula_proyectos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["celula_proyecto"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear relación",
       "request": {
         "method": "POST",
         "header": [
@@ -56,44 +80,20 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"titulo\": \"Nuevo Proyecto\",\n  \"id_lider\": 1,\n  \"descripcion\": \"Descripción del proyecto\",\n  \"id_categoria\": 1\n}"
+          "raw": "{\n  \"id_empleado\": 1,\n  \"id_proyecto\": 1\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/proyectos",
+          "raw": "http://localhost:3000/celula_proyectos",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["proyectos"]
+          "path": ["celula_proyecto"]
         }
       },
       "response": []
     },
     {
-      "name": "Actualizar proyecto",
-      "request": {
-        "method": "PATCH",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"id_proyecto\": 1,\n  \"titulo\": \"Título Actualizado\",\n  \"estado\": \"COMPLETADO\"\n}"
-        },
-        "url": {
-          "raw": "http://localhost:3000/proyectos",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["proyectos"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Eliminar proyecto",
+      "name": "Eliminar relación",
       "request": {
         "method": "DELETE",
         "header": [
@@ -104,14 +104,38 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"id_proyecto\": 1\n}"
+          "raw": "{\n  \"id\": 1\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/proyectos",
+          "raw": "http://localhost:3000/celula_proyectos",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["proyectos"]
+          "path": ["celula_proyecto"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar activo",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 1,\n  \"activo\": false\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/celula_proyectos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["celula_proyecto"]
         }
       },
       "response": []

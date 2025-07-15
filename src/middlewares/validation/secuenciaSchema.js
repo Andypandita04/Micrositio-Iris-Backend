@@ -2,10 +2,11 @@
 import { z } from 'zod';
 
 /**
- * Esquema para creación de secuencias
+ * Esquema para la creación de secuencias
  */
-export const secuenciaCreateSchema = z.object({
+const secuenciaCreateSchema = z.object({
   id_proyecto: z.number().int().positive('El ID de proyecto debe ser un número positivo'),
+  id_testing_card_padre: z.number().int().optional(),
   nombre: z.string()
     .min(3, 'El nombre debe tener al menos 3 caracteres')
     .max(50, 'El nombre no puede exceder los 50 caracteres'),
@@ -13,14 +14,18 @@ export const secuenciaCreateSchema = z.object({
 });
 
 /**
- * Esquema para actualización de secuencias
+ * Esquema para la actualización de secuencias
  */
-export const secuenciaUpdateSchema = z.object({
+const secuenciaUpdateSchema = z.object({
   nombre: z.string()
     .min(3, 'El nombre debe tener al menos 3 caracteres')
     .max(50, 'El nombre no puede exceder los 50 caracteres')
     .optional(),
-  descripcion: z.string().optional()
-}).refine(data => data.nombre || data.descripcion, {
-  message: 'Debe proporcionar al menos un campo para actualizar'
+  descripcion: z.string().optional(),
+  id_testing_card_padre: z.number()
+    .int()
+    .positive('El ID de testing card debe ser un número positivo')
+    .optional()
 });
+
+export { secuenciaCreateSchema, secuenciaUpdateSchema };

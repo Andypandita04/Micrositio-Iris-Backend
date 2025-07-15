@@ -1,60 +1,51 @@
 // src/middlewares/validation/testingCardSchema.js
 import { z } from 'zod';
 
-/**
- * Esquema para creación de testing cards
- */
-// Esquema simplificado para creación
-export const testingCardCreateSchema = z.object({
+const statusValues = ['En desarrollo', 'En validación', 'En ejecución', 'Cancelado', 'Terminado'];
+
+// Esquema base que puede ser reutilizado
+const testingCardBaseSchema = z.object({
   id_secuencia: z.number().int().positive('El ID de secuencia debe ser un número positivo'),
-  titulo: z.string()
-    .min(3, 'El título debe tener al menos 3 caracteres')
-    .max(300, 'El título no puede exceder los 300 caracteres'),
-  padre_id: z.number().int().nonnegative('El ID padre debe ser un número positivo o cero').optional(),
-  // Hacer todos los demás campos opcionales
-  hipotesis: z.string().optional(),
+  padre_id: z.number().int().positive('El ID padre debe ser un número positivo').optional(),
+  titulo: z.string().min(3, 'El título debe tener al menos 3 caracteres').max(300, 'El título no puede exceder los 300 caracteres'),
+  hipotesis: z.string().min(10, 'La hipótesis debe tener al menos 10 caracteres'),
+  id_experimento_tipo: z.number().int().positive('El ID de tipo de experimento debe ser un número positivo'),
+  descripcion: z.string().min(10, 'La descripción debe tener al menos 10 caracteres'),
+  dia_inicio: z.coerce.date(),
+  dia_fin: z.coerce.date(),
+  anexo_url: z.string().url('Debe ser una URL válida').optional(),
+  id_responsable: z.number().int().positive('El ID del responsable debe ser un número positivo'),
+  status: z.enum(statusValues).optional().default('En desarrollo')
+});
+
+// Esquema para creación con validación adicional de fechas
+const testingCardCreateSchema = testingCardBaseSchema.refine(
+  data => data.dia_fin >= data.dia_inicio,
+  {
+    message: 'La fecha de fin no puede ser anterior a la fecha de inicio',
+    path: ['dia_fin']
+  }
+);
+
+// Esquema para actualización (todos los campos opcionales)
+const testingCardUpdateSchema = z.object({
+  id_secuencia: z.number().int().positive().optional(),
+  padre_id: z.number().int().positive().optional(),
+  titulo: z.string().min(3).max(300).optional(),
+  hipotesis: z.string().min(10).optional(),
   id_experimento_tipo: z.number().int().positive().optional(),
-  descripcion: z.string().optional(),
+  descripcion: z.string().min(10).optional(),
   dia_inicio: z.coerce.date().optional(),
   dia_fin: z.coerce.date().optional(),
   anexo_url: z.string().url().optional(),
-  id_empleado: z.number().int().positive().optional(),
-  status: z.enum(['En desarrollo', 'En validación', 'En ejecución', 'Cancelado', 'Terminado'])
-    .optional()
-    .default('En desarrollo')
-}).refine(data => {
-  // Validación condicional de fechas si vienen ambas
-  if (data.dia_inicio && data.dia_fin) {
-    return data.dia_fin >= data.dia_inicio;
+  id_responsable: z.number().int().positive().optional(),
+  status: z.enum(statusValues).optional()
+}).refine(
+  data => !data.dia_fin || !data.dia_inicio || data.dia_fin >= data.dia_inicio,
+  {
+    message: 'La fecha de fin no puede ser anterior a la fecha de inicio',
+    path: ['dia_fin']
   }
-  return true;
-}, {
-  message: 'La fecha de fin no puede ser anterior a la fecha de inicio',
-  path: ['dia_fin']
-});
+);
 
-/**
- * Esquema para actualización de testing cards
- */
-export const testingCardUpdateSchema = z.object({
-  titulo: z.string()
-    .min(3, 'El título debe tener al menos 3 caracteres')
-    .max(300, 'El título no puede exceder los 300 caracteres')
-    .optional(),
-  hipotesis: z.string().min(1, 'La hipótesis no puede estar vacía').optional(),
-  id_experimento_tipo: z.number().int().positive('El ID de tipo de experimento debe ser un número positivo').optional(),
-  descripcion: z.string().min(1, 'La descripción no puede estar vacía').optional(),
-  dia_inicio: z.coerce.date().optional(),
-  dia_fin: z.coerce.date().optional(),
-  anexo_url: z.string().url('URL inválida').optional(),
-  id_empleado: z.number().int().positive('El ID de empleado debe ser un número positivo').optional(),
-  status: z.enum(['En desarrollo', 'En validación', 'En ejecución', 'Cancelado', 'Terminado']).optional()
-}).refine(data => {
-  if (data.dia_inicio && data.dia_fin) {
-    return data.dia_fin >= data.dia_inicio;
-  }
-  return true;
-}, {
-  message: 'La fecha de fin no puede ser anterior a la fecha de inicio',
-  path: ['dia_fin']
-});
+export { testingCardCreateSchema, testingCardUpdateSchema };

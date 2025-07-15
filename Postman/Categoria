@@ -1,27 +1,12 @@
 {
   "info": {
-    "_postman_id": "d4e5f6g7-h8i9-j0k1-l2m3n4o5p6q7",
-    "name": "API Proyectos",
+    "_postman_id": "d4e5f6g7-h8i9-j0k1-l2m3-n4o5p6q7r8s9",
+    "name": "API Categorías",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Obtener todos los proyectos",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3000/proyectos",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["proyectos"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Obtener proyecto específico",
+      "name": "Obtener categoría por ID",
       "request": {
         "method": "GET",
         "header": [
@@ -32,20 +17,35 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"id_proyecto\": 1\n}"
+          "raw": "{\n  \"id_categoria\": 1\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/proyectos/p",
+          "raw": "http://localhost:3000/categorias/c",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["proyectos", "p"]
+          "path": ["categoria"]
         }
       },
       "response": []
     },
     {
-      "name": "Crear proyecto",
+      "name": "Obtener todas las categorías",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/categorias",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["categorias"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear categoría",
       "request": {
         "method": "POST",
         "header": [
@@ -56,20 +56,20 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"titulo\": \"Nuevo Proyecto\",\n  \"id_lider\": 1,\n  \"descripcion\": \"Descripción del proyecto\",\n  \"id_categoria\": 1\n}"
+          "raw": "{\n  \"nombre\": \"Nueva Categoría\"\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/proyectos",
+          "raw": "http://localhost:3000/categorias",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["proyectos"]
+          "path": ["categoria"]
         }
       },
       "response": []
     },
     {
-      "name": "Actualizar proyecto",
+      "name": "Actualizar categoría",
       "request": {
         "method": "PATCH",
         "header": [
@@ -80,20 +80,20 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"id_proyecto\": 1,\n  \"titulo\": \"Título Actualizado\",\n  \"estado\": \"COMPLETADO\"\n}"
+          "raw": "{\n  \"id_categoria\": 1,\n  \"nombre\": \"Categoría Actualizada\"\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/proyectos",
+          "raw": "http://localhost:3000/categorias",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["proyectos"]
+          "path": ["categoria"]
         }
       },
       "response": []
     },
     {
-      "name": "Eliminar proyecto",
+      "name": "Eliminar categoría",
       "request": {
         "method": "DELETE",
         "header": [
@@ -104,14 +104,14 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"id_proyecto\": 1\n}"
+          "raw": "{\n  \"id_categoria\": 1\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/proyectos",
+          "raw": "http://localhost:3000/categorias",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["proyectos"]
+          "path": ["categoria"]
         }
       },
       "response": []
@@ -121,6 +121,10 @@
     {
       "key": "base_url",
       "value": "http://localhost:3000"
+    },
+    {
+      "key": "categoria_id",
+      "value": "1"
     }
   ]
 }

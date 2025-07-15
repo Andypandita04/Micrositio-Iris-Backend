@@ -1,15 +1,8 @@
 // src/models/TestingCard.js
-/**
- * Modelo que representa una testing card en el sistema
- * @class
- */
 import { testingCardCreateSchema, testingCardUpdateSchema } from '../middlewares/validation/testingCardSchema.js';
 import ApiError from '../utils/ApiError.js';
 
 class TestingCard {
-  /**
-   * @param {Object} data - Datos de la testing card
-   */
   constructor(data) {
     this.id_testing_card = data.id_testing_card;
     this.id_secuencia = data.id_secuencia;
@@ -21,19 +14,12 @@ class TestingCard {
     this.dia_inicio = new Date(data.dia_inicio);
     this.dia_fin = new Date(data.dia_fin);
     this.anexo_url = data.anexo_url || null;
-    this.id_empleado = data.id_empleado;
+    this.id_responsable = data.id_responsable;
     this.status = data.status || 'En desarrollo';
     this.created_at = new Date(data.created_at || Date.now());
     this.updated_at = new Date(data.updated_at || Date.now());
   }
 
-  /**
-   * Valida los datos para creación de testing card
-   * @static
-   * @param {Object} data - Datos a validar
-   * @returns {Object} Datos validados
-   * @throws {ApiError} Si la validación falla
-   */
   static validateCreate(data) {
     try {
       return testingCardCreateSchema.parse(data);
@@ -42,13 +28,6 @@ class TestingCard {
     }
   }
 
-  /**
-   * Valida los datos para actualización de testing card
-   * @static
-   * @param {Object} data - Datos a validar
-   * @returns {Object} Datos validados
-   * @throws {ApiError} Si la validación falla
-   */
   static validateUpdate(data) {
     try {
       return testingCardUpdateSchema.parse(data);
@@ -57,10 +36,25 @@ class TestingCard {
     }
   }
 
-  /**
-   * Convierte el modelo a formato para API
-   * @returns {Object} Objeto para respuesta
-   */
+  static fromDatabase(dbData) {
+    return new TestingCard({
+      id_testing_card: dbData.id_testing_card,
+      id_secuencia: dbData.id_secuencia,
+      padre_id: dbData.padre_id,
+      titulo: dbData.titulo,
+      hipotesis: dbData.hipotesis,
+      id_experimento_tipo: dbData.id_experimento_tipo,
+      descripcion: dbData.descripcion,
+      dia_inicio: dbData.dia_inicio,
+      dia_fin: dbData.dia_fin,
+      anexo_url: dbData.anexo_url,
+      id_responsable: dbData.id_responsable,
+      status: dbData.status,
+      created_at: dbData.created_at,
+      updated_at: dbData.updated_at
+    });
+  }
+
   toAPI() {
     return {
       id: this.id_testing_card,
@@ -73,7 +67,7 @@ class TestingCard {
       dia_inicio: this.dia_inicio.toISOString().split('T')[0],
       dia_fin: this.dia_fin.toISOString().split('T')[0],
       anexo_url: this.anexo_url,
-      id_empleado: this.id_empleado,
+      id_responsable: this.id_responsable,
       status: this.status,
       creado: this.created_at.toISOString(),
       actualizado: this.updated_at.toISOString()

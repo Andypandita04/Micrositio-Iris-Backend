@@ -1,12 +1,12 @@
 {
   "info": {
-    "_postman_id": "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6",
-    "name": "API secuenciass",
+    "_postman_id": "d4e5f6g7-h8i9-j0k1-l2m3-n4o5p6q7r8s9",
+    "name": "API Testing Cards",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Obtener secuenciass por proyecto",
+      "name": "Obtener testing card por ID",
       "request": {
         "method": "GET",
         "header": [
@@ -17,20 +17,20 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"id_proyecto\": 1\n}"
+          "raw": "{\n  \"id_testing_card\": 1\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/secuencias/p",
+          "raw": "http://localhost:3000/testing_card/t",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["secuencias", "p"]
+          "path": ["testing_card", "t"]
         }
       },
       "response": []
     },
     {
-      "name": "Obtener secuencias por ID",
+      "name": "Obtener testing cards por secuencia",
       "request": {
         "method": "GET",
         "header": [
@@ -44,32 +44,56 @@
           "raw": "{\n  \"id_secuencia\": 1\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/secuencias/s",
+          "raw": "http://localhost:3000/testing_card/s",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["secuencias", "s"]
+          "path": ["testing_card", "s"]
         }
       },
       "response": []
     },
     {
-      "name": "Obtener todas las secuenciass",
+      "name": "Obtener todas las testing cards",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:3000/secuencias",
+          "raw": "http://localhost:3000/testing_card",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["secuencias"]
+          "path": ["testing_card"]
         }
       },
       "response": []
     },
     {
-      "name": "Crear secuencias",
+      "name": "Obtener testing cards por padre",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"padre_id\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/testing_card/padre",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["testing_card", "padre"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear testing card",
       "request": {
         "method": "POST",
         "header": [
@@ -80,20 +104,20 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"id_proyecto\": 1,\n  \"id_testing_card_padre\": 1,\n  \"nombre\": \"secuencias de pruebas\",\n  \"descripcion\": \"Descripción de la secuencias\"\n}"
+          "raw": "{\n  \"id_secuencia\": 1,\n  \"titulo\": \"Nueva testing card\",\n  \"hipotesis\": \"Si hacemos X, entonces ocurrirá Y\",\n  \"id_experimento_tipo\": 1,\n  \"descripcion\": \"Descripción detallada del experimento\",\n  \"dia_inicio\": \"2023-06-01\",\n  \"dia_fin\": \"2023-06-30\",\n  \"id_responsable\": 1\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/secuencias",
+          "raw": "http://localhost:3000/testing_card",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["secuencias"]
+          "path": ["testing_card"]
         }
       },
       "response": []
     },
     {
-      "name": "Actualizar secuencias",
+      "name": "Actualizar testing card",
       "request": {
         "method": "PATCH",
         "header": [
@@ -104,20 +128,20 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"id_secuencia\": 1,\n  \"nombre\": \"Nuevo nombre\",\n  \"descripcion\": \"Nueva descripción\"\n}"
+          "raw": "{\n  \"id_testing_card\": 1,\n  \"titulo\": \"Título actualizado\",\n  \"status\": \"En ejecución\"\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/secuencias",
+          "raw": "http://localhost:3000/testing_card",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["secuencias"]
+          "path": ["testing_card"]
         }
       },
       "response": []
     },
     {
-      "name": "Eliminar secuencias",
+      "name": "Eliminar testing card",
       "request": {
         "method": "DELETE",
         "header": [
@@ -128,14 +152,14 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"id_secuencia\": 1\n}"
+          "raw": "{\n  \"id_testing_card\": 1\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/secuencias",
+          "raw": "http://localhost:3000/testing_card",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["secuencias"]
+          "path": ["testing_card"]
         }
       },
       "response": []
@@ -145,6 +169,10 @@
     {
       "key": "base_url",
       "value": "http://localhost:3000"
+    },
+    {
+      "key": "testing_card_id",
+      "value": "1"
     }
   ]
 }

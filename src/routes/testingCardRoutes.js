@@ -3,36 +3,27 @@ import express from 'express';
 import TestingCardController from '../controllers/testingCardController.js';
 
 const router = express.Router();
-const controller = new TestingCardController();
+const testingCardController = new TestingCardController();
 
-/**
- * Obtiene una testing card por ID (ID en body)
- */
-router.get('/tc', controller.obtenerPorId.bind(controller));
+// Obtener por ID
+router.get('/t', testingCardController.obtenerPorId.bind(testingCardController));
 
-/**
- * Obtiene testing cards por secuencia (ID en body)
- */
-router.get('/secuencia', controller.obtenerPorSecuencia.bind(controller));
+// Obtener por secuencia
+router.get('/s', testingCardController.obtenerPorSecuencia.bind(testingCardController));
 
-/**
- * Obtiene todas las testing cards
- */
-router.get('/', controller.obtenerTodas.bind(controller));
+// Obtener todos
+router.get('/', testingCardController.listarTodos.bind(testingCardController));
 
-/**
- * Crea una nueva testing card
- */
-router.post('/', controller.crear.bind(controller));
+// Obtener por padre
+router.get('/padre', testingCardController.obtenerPorPadre.bind(testingCardController));
 
-/**
- * Actualiza una testing card (ID en body)
- */
-router.patch('/', controller.actualizar.bind(controller));
+// Crear
+router.post('/', testingCardController.crear.bind(testingCardController));
 
-/**
- * Elimina una testing card (ID en body)
- */
-router.delete('/', controller.eliminar.bind(controller));
+// Actualizar
+router.patch('/', testingCardController.actualizar.bind(testingCardController));
+
+// Eliminar
+router.delete('/', testingCardController.eliminar.bind(testingCardController));
 
 export default router;

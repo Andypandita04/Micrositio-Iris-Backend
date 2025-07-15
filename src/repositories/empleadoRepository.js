@@ -1,4 +1,3 @@
-// src/repositories/empleadoRepository.js
 /**
  * Repositorio para interactuar con la tabla empleado en Supabase.
  * @class
@@ -48,6 +47,24 @@ class EmpleadoRepository {
     }
 
     return Empleado.fromDatabase(data[0]);
+  }
+
+  /**
+   * Obtiene todos los empleados.
+   * @async
+   * @returns {Promise<Array<Object>>} Lista de empleados.
+   * @throws {ApiError} Si ocurre un error al consultar.
+   */
+  async listarTodos() {
+    const { data, error } = await supabase
+      .from('empleado')
+      .select('*');
+
+    if (error) {
+      throw new ApiError(`Error al listar empleados: ${error.message}`, 500);
+    }
+
+    return data; // O mapea si tienes un modelo
   }
 
   /**

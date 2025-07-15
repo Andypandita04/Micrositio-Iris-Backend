@@ -1,4 +1,3 @@
-// src/controllers/empleadoController.js
 /**
  * Controlador para manejar las operaciones CRUD de empleados.
  * @class
@@ -39,6 +38,22 @@ class EmpleadoController {
       next(error);
     }
   }
+
+  /**
+   * Maneja la obtención de todos los empleados (GET /empleados/todos).
+   * @param {Object} req - Request de Express.
+   * @param {Object} res - Response de Express.
+   * @param {Function} next - Función para pasar al siguiente middleware.
+   */
+  async listarTodos(req, res, next) {
+    try {
+      const empleados = await this.empleadoService.listarTodos();
+      res.json(empleados);
+    } catch (error) {
+      next(error);
+    }
+  }
+
 
   /**
    * Maneja la creación de un empleado (POST /empleados).

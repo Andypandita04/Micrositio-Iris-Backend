@@ -1,6 +1,6 @@
 // src/models/Secuencia.js
 /**
- * Modelo que representa una secuencia en el sistema, dentro de secuncia se encontraran las TestingCard y las Learning Card
+ * Modelo de Secuencia que representa la estructura y comportamiento de una secuencia de testing.
  * @class
  */
 import { secuenciaCreateSchema, secuenciaUpdateSchema } from '../middlewares/validation/secuenciaSchema.js';
@@ -8,23 +8,26 @@ import ApiError from '../utils/ApiError.js';
 
 class Secuencia {
   /**
-   * @param {Object} data - Datos de la secuencia
+   * Crea una instancia del modelo Secuencia.
+   * @param {Object} data - Datos de la secuencia.
    */
   constructor(data) {
     this.id_secuencia = data.id_secuencia;
     this.id_proyecto = data.id_proyecto;
+    this.id_testing_card_padre = data.id_testing_card_padre;
     this.nombre = data.nombre;
     this.descripcion = data.descripcion || null;
-    this.created_at = new Date(data.created_at || Date.now());
-    this.updated_at = new Date(data.updated_at || Date.now());
+    this.created_at = data.created_at ? new Date(data.created_at) : new Date();
+    this.updated_at = data.updated_at ? new Date(data.updated_at) : new Date();
+    this.estado = data.estado || 'activa';
   }
 
   /**
-   * Valida los datos para creación de secuencia
+   * Valida los datos de la secuencia al crear.
    * @static
-   * @param {Object} data - Datos a validar
-   * @returns {Object} Datos validados
-   * @throws {ApiError} Si la validación falla
+   * @param {Object} data - Datos a validar.
+   * @returns {Object} Datos validados.
+   * @throws {ApiError} Si la validación falla.
    */
   static validateCreate(data) {
     try {
@@ -35,11 +38,11 @@ class Secuencia {
   }
 
   /**
-   * Valida los datos para actualización de secuencia
+   * Valida los datos de la secuencia al actualizar.
    * @static
-   * @param {Object} data - Datos a validar
-   * @returns {Object} Datos validados
-   * @throws {ApiError} Si la validación falla
+   * @param {Object} data - Datos a validar.
+   * @returns {Object} Datos validados.
+   * @throws {ApiError} Si la validación falla.
    */
   static validateUpdate(data) {
     try {
@@ -49,18 +52,19 @@ class Secuencia {
     }
   }
 
-  /**
-   * Convierte el modelo a formato para API
-   * @returns {Object} Objeto para respuesta
+   /**
+   * Convierte el modelo a un objeto para la respuesta API.
+   * @returns {Object} Objeto preparado para la respuesta.
    */
   toAPI() {
     return {
-      id: this.id_secuencia,
-      id_proyecto: this.id_proyecto,
-      nombre: this.nombre,
-      descripcion: this.descripcion,
-      creado: this.created_at.toISOString(),
-      actualizado: this.updated_at.toISOString()
+      id: this.id_secuencia?.toString() ?? '',
+      nombre: this.nombre ?? '',
+      descripcion: this.descripcion ?? '',
+      proyectoId: this.id_proyecto?.toString() ?? '',
+      fechaCreacion: this.created_at ? this.created_at.toISOString() : '',
+      estado: this.estado ?? 'activa',
+      // Si necesitas otros campos, agrégalos aquí
     };
   }
 }

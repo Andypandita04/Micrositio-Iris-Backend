@@ -5,9 +5,30 @@ import Secuencia from '../models/Secuencia.js';
 
 class SecuenciaRepository {
   /**
-   * Obtiene una secuencia por ID
-   * @param {number} id_secuencia 
-   * @returns {Promise<Secuencia|null>}
+   * Obtiene una secuencia por ID de proyecto
+   * @param {number} id_proyecto - ID del proyecto
+   * @returns {Promise<Array>} Lista de secuencias (objetos planos)
+   * @throws {ApiError} Si ocurre un error
+   */
+  async obtenerPorProyecto(id_proyecto) {
+    const { data, error } = await supabase
+      .from('secuencia')
+      .select('*')
+      .eq('id_proyecto', id_proyecto);
+
+    if (error) {
+      throw new ApiError(`Error al obtener secuencias: ${error.message}`, 500);
+    }
+
+    // Devuelve objetos planos
+    return data.map(sec => new Secuencia(sec).toAPI());
+  }
+
+  /**
+   * Obtiene una secuencia por su ID
+   * @param {number} id_secuencia - ID de la secuencia
+   * @returns {Promise<Object|null>} Secuencia encontrada (objeto plano) o null
+   * @throws {ApiError} Si ocurre un error
    */
   async obtenerPorId(id_secuencia) {
     const { data, error } = await supabase
@@ -20,30 +41,13 @@ class SecuenciaRepository {
       throw new ApiError(`Error al obtener secuencia: ${error.message}`, 500);
     }
 
-    return data ? new Secuencia(data) : null;
-  }
-
-  /**
-   * Obtiene secuencias por proyecto
-   * @param {number} id_proyecto 
-   * @returns {Promise<Array<Secuencia>>}
-   */
-  async obtenerPorProyecto(id_proyecto) {
-    const { data, error } = await supabase
-      .from('secuencia')
-      .select('*')
-      .eq('id_proyecto', id_proyecto);
-
-    if (error) {
-      throw new ApiError(`Error al obtener secuencias: ${error.message}`, 500);
-    }
-
-    return data.map(sec => new Secuencia(sec));
+    return data ? new Secuencia(data).toAPI() : null;
   }
 
   /**
    * Obtiene todas las secuencias
-   * @returns {Promise<Array<Secuencia>>}
+   * @returns {Promise<Array>} Lista de secuencias (objetos planos)
+   * @throws {ApiError} Si ocurre un error
    */
   async obtenerTodas() {
     const { data, error } = await supabase
@@ -54,13 +58,14 @@ class SecuenciaRepository {
       throw new ApiError(`Error al obtener secuencias: ${error.message}`, 500);
     }
 
-    return data.map(sec => new Secuencia(sec));
+    return data.map(sec => new Secuencia(sec).toAPI());
   }
 
   /**
    * Crea una nueva secuencia
-   * @param {Object} secuenciaData 
-   * @returns {Promise<Secuencia>}
+   * @param {Object} secuenciaData - Datos de la secuencia
+   * @returns {Promise<Object>} Secuencia creada (objeto plano)
+   * @throws {ApiError} Si ocurre un error
    */
   async crear(secuenciaData) {
     const { data, error } = await supabase
@@ -72,22 +77,20 @@ class SecuenciaRepository {
       throw new ApiError(`Error al crear secuencia: ${error.message}`, 500);
     }
 
-    return new Secuencia(data[0]);
+    return new Secuencia(data[0]).toAPI();
   }
 
   /**
-   * Actualiza una secuencia
-   * @param {number} id_secuencia 
-   * @param {Object} updateData 
-   * @returns {Promise<Secuencia>}
+   * Actualiza una secuencia existente
+   * @param {number} id_secuencia - ID de la secuencia
+   * @param {Object} secuenciaData - Datos a actualizar
+   * @returns {Promise<Object>} Secuencia actualizada (objeto plano)
+   * @throws {ApiError} Si ocurre un error
    */
-  async actualizar(id_secuencia, updateData) {
+  async actualizar(id_secuencia, secuenciaData) {
     const { data, error } = await supabase
       .from('secuencia')
-      .update({
-        ...updateData,
-        updated_at: new Date().toISOString()
-      })
+      .update(secuenciaData)
       .eq('id_secuencia', id_secuencia)
       .select();
 
@@ -95,13 +98,14 @@ class SecuenciaRepository {
       throw new ApiError(`Error al actualizar secuencia: ${error.message}`, 500);
     }
 
-    return new Secuencia(data[0]);
+    return new Secuencia(data[0]).toAPI();
   }
 
   /**
    * Elimina una secuencia
-   * @param {number} id_secuencia 
-   * @returns {Promise<Secuencia>}
+   * @param {number} id_secuencia - ID de la secuencia
+   * @returns {Promise<Object>} Secuencia eliminada (objeto plano)
+   * @throws {ApiError} Si ocurre un error
    */
   async eliminar(id_secuencia) {
     const { data, error } = await supabase
@@ -118,7 +122,7 @@ class SecuenciaRepository {
       throw new ApiError('Secuencia no encontrada', 404);
     }
 
-    return new Secuencia(data[0]);
+    return new Secuencia(data[0]).toAPI();
   }
 }
 

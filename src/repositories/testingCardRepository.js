@@ -4,11 +4,6 @@ import ApiError from '../utils/ApiError.js';
 import TestingCard from '../models/TestingCard.js';
 
 class TestingCardRepository {
-  /**
-   * Obtiene una testing card por ID
-   * @param {number} id_testing_card 
-   * @returns {Promise<TestingCard|null>}
-   */
   async obtenerPorId(id_testing_card) {
     const { data, error } = await supabase
       .from('testing_card')
@@ -20,14 +15,9 @@ class TestingCardRepository {
       throw new ApiError(`Error al obtener testing card: ${error.message}`, 500);
     }
 
-    return data ? new TestingCard(data) : null;
+    return data ? TestingCard.fromDatabase(data) : null;
   }
 
-  /**
-   * Obtiene testing cards por secuencia
-   * @param {number} id_secuencia 
-   * @returns {Promise<Array<TestingCard>>}
-   */
   async obtenerPorSecuencia(id_secuencia) {
     const { data, error } = await supabase
       .from('testing_card')
@@ -35,33 +25,37 @@ class TestingCardRepository {
       .eq('id_secuencia', id_secuencia);
 
     if (error) {
-      throw new ApiError(`Error al obtener testing cards: ${error.message}`, 500);
+      throw new ApiError(`Error al obtener testing cards por secuencia: ${error.message}`, 500);
     }
 
-    return data.map(tc => new TestingCard(tc));
+    return data.map(item => TestingCard.fromDatabase(item));
   }
 
-  /**
-   * Obtiene todas las testing cards
-   * @returns {Promise<Array<TestingCard>>}
-   */
-  async obtenerTodas() {
+  async obtenerPorPadre(padre_id) {
+    const { data, error } = await supabase
+      .from('testing_card')
+      .select('*')
+      .eq('padre_id', padre_id);
+
+    if (error) {
+      throw new ApiError(`Error al obtener testing cards por padre: ${error.message}`, 500);
+    }
+
+    return data.map(item => TestingCard.fromDatabase(item));
+  }
+
+  async listarTodos() {
     const { data, error } = await supabase
       .from('testing_card')
       .select('*');
 
     if (error) {
-      throw new ApiError(`Error al obtener testing cards: ${error.message}`, 500);
+      throw new ApiError(`Error al listar testing cards: ${error.message}`, 500);
     }
 
-    return data.map(tc => new TestingCard(tc));
+    return data.map(item => TestingCard.fromDatabase(item));
   }
 
-  /**
-   * Crea una nueva testing card
-   * @param {Object} testingCardData 
-   * @returns {Promise<TestingCard>}
-   */
   async crear(testingCardData) {
     const { data, error } = await supabase
       .from('testing_card')
@@ -72,22 +66,13 @@ class TestingCardRepository {
       throw new ApiError(`Error al crear testing card: ${error.message}`, 500);
     }
 
-    return new TestingCard(data[0]);
+    return TestingCard.fromDatabase(data[0]);
   }
 
-  /**
-   * Actualiza una testing card
-   * @param {number} id_testing_card 
-   * @param {Object} updateData 
-   * @returns {Promise<TestingCard>}
-   */
-  async actualizar(id_testing_card, updateData) {
+  async actualizar(id_testing_card, testingCardData) {
     const { data, error } = await supabase
       .from('testing_card')
-      .update({
-        ...updateData,
-        updated_at: new Date().toISOString()
-      })
+      .update(testingCardData)
       .eq('id_testing_card', id_testing_card)
       .select();
 
@@ -95,14 +80,9 @@ class TestingCardRepository {
       throw new ApiError(`Error al actualizar testing card: ${error.message}`, 500);
     }
 
-    return new TestingCard(data[0]);
+    return data ? TestingCard.fromDatabase(data[0]) : null;
   }
 
-  /**
-   * Elimina una testing card
-   * @param {number} id_testing_card 
-   * @returns {Promise<TestingCard>}
-   */
   async eliminar(id_testing_card) {
     const { data, error } = await supabase
       .from('testing_card')
@@ -114,11 +94,7 @@ class TestingCardRepository {
       throw new ApiError(`Error al eliminar testing card: ${error.message}`, 500);
     }
 
-    if (!data || data.length === 0) {
-      throw new ApiError('Testing card no encontrada', 404);
-    }
-
-    return new TestingCard(data[0]);
+    return data ? TestingCard.fromDatabase(data[0]) : null;
   }
 }
 
