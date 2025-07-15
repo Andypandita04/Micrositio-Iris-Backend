@@ -59,6 +59,7 @@ class Secuencia {
   toAPI() {
     return {
       id: this.id_secuencia?.toString() ?? '',
+      id_secuencia: this.id_secuencia, // <-- ¡Agregado!
       nombre: this.nombre ?? '',
       descripcion: this.descripcion ?? '',
       proyectoId: this.id_proyecto?.toString() ?? '',

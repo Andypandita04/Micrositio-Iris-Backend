@@ -113,6 +113,26 @@ class ExperimentoTipoRepository {
 
     return new ExperimentoTipo(data[0]);
   }
+
+  /**
+ * Obtiene el primer tipo de experimento disponible.
+ * @async
+ * @returns {Promise<ExperimentoTipo|null>} El primer tipo de experimento o null si no hay ninguno.
+ * @throws {ApiError} Si ocurre un error al consultar.
+ */
+async obtenerPrimero() {
+  const { data, error } = await supabase
+    .from('experimento_tipo')
+    .select('*')
+    .limit(1);
+
+  if (error) {
+    throw new ApiError(`Error al obtener tipo de experimento: ${error.message}`, 500);
+  }
+
+  return data && data.length > 0 ? new ExperimentoTipo(data[0]) : null;
+}
+
 }
 
 export default ExperimentoTipoRepository;

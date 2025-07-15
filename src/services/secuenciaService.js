@@ -1,108 +1,152 @@
 // src/services/secuenciaService.js
-import SecuenciaRepository from '../repositories/secuenciaRepository.js';
-import ProyectoRepository from '../repositories/proyectoRepository.js';
-import TestingCardRepository from '../repositories/testingCardRepository.js';
-import Secuencia from '../models/Secuencia.js'; 
 import ApiError from '../utils/ApiError.js';
 
 class SecuenciaService {
-  constructor(
-    secuenciaRepository = new SecuenciaRepository(),
-    proyectoRepository = new ProyectoRepository(),
-    testingCardRepository = new TestingCardRepository()
-  ) {
-    this.secuenciaRepo = secuenciaRepository;
-    this.proyectoRepo = proyectoRepository;
-    this.testingCardRepo = testingCardRepository;
+  constructor(secuenciaRepository, proyectoRepository, testingCardRepository, experimentoTipoRepository) {
+    this.secuenciaRepository = secuenciaRepository;
+    this.proyectoRepository = proyectoRepository;
+    this.testingCardRepository = testingCardRepository;
+    this.experimentoTipoRepository = experimentoTipoRepository; // <-- Esto es clave
   }
 
-  /**
-   * Obtiene secuencias por ID de proyecto
-   * @param {number} id_proyecto - ID del proyecto
-   * @returns {Promise<Array>} Lista de secuencias
-   * @throws {ApiError} Si el proyecto no existe
-   */
   async obtenerPorProyecto(id_proyecto) {
-    const proyecto = await this.proyectoRepo.obtenerPorId(id_proyecto);
-    if (!proyecto) {
-      throw new ApiError('Proyecto no encontrado', 404);
+    if (!id_proyecto) {
+      throw new ApiError('id_proyecto es requerido', 400);
     }
 
-    return this.secuenciaRepo.obtenerPorProyecto(id_proyecto);
+    // Verificar que el proyecto existe
+    const proyectoExiste = await this.proyectoRepository.obtenerPorId(id_proyecto);
+    if (!proyectoExiste) {
+      throw new ApiError('El proyecto especificado no existe', 404);
+    }
+
+    return await this.secuenciaRepository.obtenerPorProyecto(id_proyecto);
   }
 
-  /**
-   * Obtiene una secuencia por su ID
-   * @param {number} id_secuencia - ID de la secuencia
-   * @returns {Promise<Object>} Secuencia encontrada
-   * @throws {ApiError} Si la secuencia no existe
-   */
   async obtenerPorId(id_secuencia) {
-    const secuencia = await this.secuenciaRepo.obtenerPorId(id_secuencia);
+    if (!id_secuencia) {
+      throw new ApiError('id_secuencia es requerido', 400);
+    }
+
+    const secuencia = await this.secuenciaRepository.obtenerPorId(id_secuencia);
     if (!secuencia) {
       throw new ApiError('Secuencia no encontrada', 404);
     }
-    return secuencia.toAPI();
+
+    return secuencia;
   }
 
-  /**
-   * Obtiene todas las secuencias
-   * @returns {Promise<Array>} Lista de secuencias
-   */
   async obtenerTodas() {
-    const secuencias = await this.secuenciaRepo.obtenerTodas();
-    return secuencias.map(sec => sec.toAPI());
+    return await this.secuenciaRepository.obtenerTodas();
+  }
+
+  async crear(secuenciaData) {
+    // Verificar que el proyecto existe
+    const proyectoExiste = await this.proyectoRepository.obtenerPorId(secuenciaData.id_proyecto);
+    if (!proyectoExiste) {
+      throw new ApiError('El proyecto especificado no existe', 404);
+    }
+
+    return await this.secuenciaRepository.crear(secuenciaData);
   }
 
   /**
- * Crea una nueva secuencia
- * @param {Object} secuenciaData - Datos de la secuencia
- * @returns {Promise<Object>} Secuencia creada
- * @throws {ApiError} Si proyecto o testing card no existen
- */
-async crear(secuenciaData) {
-  // Verificar que el proyecto existe
-  const proyecto = await this.proyectoRepo.obtenerPorId(secuenciaData.id_proyecto);
-  if (!proyecto) {
-    throw new ApiError('Proyecto no encontrado', 404);
-  }
-
-  // Verificar que el testing card existe (si aplica)
-  // const testingCard = await this.testingCardRepo.obtenerPorId(secuenciaData.id_testing_card_padre);
-  // if (!testingCard) {
-  //   throw new ApiError('Testing card no encontrado', 404);
-  // }
-
-  return await this.secuenciaRepo.crear(secuenciaData);
-}   
-
-  /**
-   * Actualiza una secuencia existente
-   * @param {number} id_secuencia - ID de la secuencia
-   * @param {Object} secuenciaData - Datos a actualizar
-   * @returns {Promise<Object>} Secuencia actualizada
-   * @throws {ApiError} Si la secuencia no existe
+   * 🔥 NUEVO: Crea una secuencia y automáticamente crea una testing card asociada
+   * @param {Object} secuenciaData - Datos de la secuencia
+   * @returns {Object} - Objeto con secuencia y testing_card creadas
    */
+  async crearConTestingCard(secuenciaData) {
+    try {
+      // 1. Verificar que el proyecto existe
+      const proyectoExiste = await this.proyectoRepository.obtenerPorId(secuenciaData.id_proyecto);
+      if (!proyectoExiste) {
+        throw new ApiError('El proyecto especificado no existe', 404);
+      }
+
+      // 2. Crear la secuencia
+      const nuevaSecuencia = await this.secuenciaRepository.crear(secuenciaData);
+
+      // 3. Obtener un id_experimento_tipo válido
+      const tipoExperimento = await this.experimentoTipoRepository.obtenerPrimero();
+      if (!tipoExperimento) {
+        throw new ApiError('No hay tipos de experimento disponibles', 400);
+      }
+      const id_experimento_tipo = tipoExperimento.id_experimento_tipo;
+
+      // 4. Crear la testing card asociada con valores por defecto
+      const testingCardData = {
+        id_secuencia: nuevaSecuencia.id_secuencia,
+        titulo: `Testing Card - ${nuevaSecuencia.nombre}`,
+        hipotesis: '',
+        descripcion: '',
+        status: 'En desarrollo',
+        id_experimento_tipo, // Ahora es válido
+        padre_id: null,
+        dia_inicio: null,
+        dia_fin: null,
+        anexo_url: null,
+        id_responsable: null
+      };
+
+      const nuevaTestingCard = await this.testingCardRepository.crear(testingCardData);
+
+      // 5. (Opcional) Actualizar la secuencia con el id_testing_card_padre
+      if (nuevaTestingCard && nuevaTestingCard.id_testing_card) {
+        await this.secuenciaRepository.actualizar(nuevaSecuencia.id_secuencia, {
+          id_testing_card_padre: nuevaTestingCard.id_testing_card
+        });
+        // Obtener la secuencia actualizada
+        const secuenciaActualizada = await this.secuenciaRepository.obtenerPorId(nuevaSecuencia.id_secuencia);
+        return {
+          secuencia: secuenciaActualizada,
+          testing_card: nuevaTestingCard,
+          mensaje: 'Secuencia y Testing Card creadas exitosamente'
+        };
+      }
+      return {
+        secuencia: nuevaSecuencia,
+        testing_card: nuevaTestingCard,
+        mensaje: 'Secuencia y Testing Card creadas exitosamente'
+      };
+    } catch (error) {
+      throw new ApiError(`Error al crear secuencia con testing card: ${error.message}`, 500);
+    }
+  }
+
   async actualizar(id_secuencia, secuenciaData) {
-    if (secuenciaData.id_testing_card_padre) {
-      const testingCard = await this.testingCardRepo.obtenerPorId(secuenciaData.id_testing_card_padre);
-      if (!testingCard) {
-        throw new ApiError('Testing card no encontrado', 404);
+    if (!id_secuencia) {
+      throw new ApiError('id_secuencia es requerido', 400);
+    }
+
+    // Verificar que la secuencia existe
+    const secuenciaExiste = await this.secuenciaRepository.obtenerPorId(id_secuencia);
+    if (!secuenciaExiste) {
+      throw new ApiError('Secuencia no encontrada', 404);
+    }
+
+    // Si se está actualizando el proyecto, verificar que existe
+    if (secuenciaData.id_proyecto) {
+      const proyectoExiste = await this.proyectoRepository.obtenerPorId(secuenciaData.id_proyecto);
+      if (!proyectoExiste) {
+        throw new ApiError('El proyecto especificado no existe', 404);
       }
     }
 
-    const secuencia = await this.secuenciaRepo.actualizar(id_secuencia, secuenciaData);
-    return secuencia; // <-- Ya es un objeto plano, no llames .toAPI()
+    return await this.secuenciaRepository.actualizar(id_secuencia, secuenciaData);
   }
 
-  /**
-   * Elimina una secuencia
-   * @param {number} id_secuencia - ID de la secuencia
-   * @returns {Promise<void>}
-   * @throws {ApiError} Si la secuencia no existe
-   */
   async eliminar(id_secuencia) {
-    await this.secuenciaRepo.eliminar(id_secuencia);
+    if (!id_secuencia) {
+      throw new ApiError('id_secuencia es requerido', 400);
+    }
+
+    // Verificar que la secuencia existe
+    const secuenciaExiste = await this.secuenciaRepository.obtenerPorId(id_secuencia);
+    if (!secuenciaExiste) {
+      throw new ApiError('Secuencia no encontrada', 404);
+    }
+
+    return await this.secuenciaRepository.eliminar(id_secuencia);
   }
 }
 

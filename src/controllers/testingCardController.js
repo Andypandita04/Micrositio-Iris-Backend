@@ -9,6 +9,8 @@ class TestingCardController {
   }
 
   async obtenerPorId(req, res, next) {
+    console.log('Query params:', req.query);
+  console.log('id_testing_card:', req.query.id_testing_card);
     try {
       if (!req.body.id_testing_card) {
         throw new ApiError('Se requiere el campo "id_testing_card" en el body', 400);
@@ -66,20 +68,30 @@ class TestingCardController {
     }
   }
 
-  async actualizar(req, res, next) {
-    try {
-      if (!req.body.id_testing_card) {
-        throw new ApiError('Se requiere el campo "id_testing_card" en el body', 400);
-      }
-
-      const { id_testing_card, ...updateData } = req.body;
-      const validatedData = testingCardUpdateSchema.parse(updateData);
-      const testingCard = await this.testingCardService.actualizar(id_testing_card, validatedData);
-      res.json(testingCard);
-    } catch (error) {
-      next(error);
+ // En testingCardController.js
+async actualizar(req, res) {
+  console.log('Body recibido:', req.body);
+  console.log('id_testing_card del body:', req.body.id_testing_card);
+  try {
+    // Leer id_testing_card del body
+    const { id_testing_card, ...updateData } = req.body;
+    
+    if (!id_testing_card) {
+      return res.status(400).json({ error: 'id_testing_card es requerido' });
     }
+    
+    const updatedCard = await this.testingCardRepository.actualizar(id_testing_card, updateData);
+    
+    if (!updatedCard) {
+      return res.status(404).json({ error: 'Testing card no encontrada' });
+    }
+    
+    res.json(updatedCard);
+  } catch (error) {
+    console.error('Error en actualizar:', error);
+    res.status(500).json({ error: error.message });
   }
+}
 
   async eliminar(req, res, next) {
     try {

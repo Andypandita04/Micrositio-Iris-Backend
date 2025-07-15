@@ -3,6 +3,7 @@ import SecuenciaService from '../services/secuenciaService.js';
 import SecuenciaRepository from '../repositories/secuenciaRepository.js';
 import ProyectoRepository from '../repositories/proyectoRepository.js';
 import TestingCardRepository from '../repositories/testingCardRepository.js';
+import ExperimentoTipoRepository from '../repositories/experimentoTipoRepository.js';
 import Secuencia from '../models/Secuencia.js';
 import { secuenciaCreateSchema, secuenciaUpdateSchema } from '../middlewares/validation/secuenciaSchema.js';
 import ApiError from '../utils/ApiError.js';
@@ -12,11 +13,13 @@ class SecuenciaController {
     const secuenciaRepository = new SecuenciaRepository();
     const proyectoRepository = new ProyectoRepository();
     const testingCardRepository = new TestingCardRepository();
+    const experimentoTipoRepository = new ExperimentoTipoRepository(); // <-- Agrega esto
 
     this.secuenciaService = new SecuenciaService(
       secuenciaRepository,
       proyectoRepository,
-      testingCardRepository
+      testingCardRepository,
+      experimentoTipoRepository // <-- Y pásalo aquí
     );
   }
 
@@ -77,7 +80,7 @@ class SecuenciaController {
   }
 
   /**
-   * Crea una nueva secuencia
+   * Crea una nueva secuencia y automáticamente crea una testing card asociada
    * @param {Object} req - Request de Express
    * @param {Object} res - Response de Express
    * @param {Function} next - Next middleware
@@ -85,8 +88,11 @@ class SecuenciaController {
   async crear(req, res, next) {
     try {
       const validatedData = secuenciaCreateSchema.parse(req.body);
-      const secuencia = await this.secuenciaService.crear(validatedData);
-      res.status(201).json(secuencia);
+      
+      // 🔥 NUEVO: Crear secuencia Y testing card en una sola operación
+      const resultado = await this.secuenciaService.crearConTestingCard(validatedData);
+      
+      res.status(201).json(resultado);
     } catch (error) {
       next(new ApiError(error.message, 400));
     }
@@ -104,7 +110,7 @@ class SecuenciaController {
         throw new ApiError('Se requiere el campo "id_secuencia" en el body', 400);
       }
 
-      const { id_secuencia, ...updateData } = req.body;
+      const { id_secuencia, ...updateData } = req.query;
       const validatedData = secuenciaUpdateSchema.parse(updateData);
       const secuencia = await this.secuenciaService.actualizar(id_secuencia, validatedData);
       res.json(secuencia);
