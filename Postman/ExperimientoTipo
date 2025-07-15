@@ -1,0 +1,126 @@
+{
+  "info": {
+    "_postman_id": "d4e5f6g7-h8i9-j0k1-l2m3-n4o5p6q7r8s9",
+    "name": "API Experimento Tipo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Obtener tipo de experimento por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_experimento_tipo\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/experimento_tipo/e",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["experimento_tipo", "e"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener todos los tipos de experimento",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/experimento_tipo",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["experimento_tipo"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear tipo de experimento",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"DESCUBRIMIENTO\",\n  \"nombre\": \"Experimento de Prueba\",\n  \"icono\": \"icon-test\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/experimento_tipo",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["experimento_tipo"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar tipo de experimento",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_experimento_tipo\": 1,\n  \"nombre\": \"Nuevo nombre\",\n  \"icono\": \"nuevo-icono\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/experimento_tipo",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["experimento_tipo"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar tipo de experimento",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_experimento_tipo\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/experimento_tipo",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["experimento_tipo"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    }
+  ]
+}

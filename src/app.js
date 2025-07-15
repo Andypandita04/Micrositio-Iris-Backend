@@ -1,46 +1,51 @@
-const express = require('express');
-const admin = require('firebase-admin');
-
-// Inicializa Firebase Admin SDK (usa tus credenciales reales)
-const serviceAccount = require('./bd-micrositio-iris-firebase-adminsdk-fbsvc-87bd7e3157.json'); // Descarga esto desde Firebase Console
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  //databaseURL: "https://mi-proyecto-12345.firebaseio.com" // Usa TU URL aquí
-});
-
-admin.firestore().listCollections().then(collections => {
-  console.log("Conexión exitosa a Firestore. Colecciones:", collections.map(c => c.id));
-}).catch(error => {
-  console.error("Error conectando a Firestore:", error);
-});
-
-
-// Inicializa Express
+import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+import proyectoRoutes from './routes/proyectoRoutes.js';
+import celulaProyectoRoutes from './routes/celulaProyectoRoutes.js';
+import empleadoRoutes from './routes/empleadoRoutes.js'; 
+import secuenciaRoutes from './routes/secuenciaRoutes.js';
+import categotiaRoutes from './routes/categoriaRoutes.js'
+import experimentosTipoRoutes from './routes/experimentoTipoRoutes.js'
+import testingCardRoutes from './routes/testingCardRoutes.js';
+import learningCardRoutes from './routes/learningCardRoutes.js';
+import metricaTestingCardRoutes from './routes/metricaTestingCardRoutes.js';
+import errorHandler from './middlewares/errorHandler.js';
+import bodyParser from 'body-parser'; 
+ 
+ 
+ 
+// Configurar dotenv
+dotenv.config();
+ 
 const app = express();
-app.use(express.json()); // Para parsear JSON en las requests
-
-// Inyección de Dependencias
-const ProyectoRepository = require('./repositories/proyectoRepository');
-const ProyectoService = require('./services/proyectoService');
-const ProyectoController = require('./controllers/proyectoController');
-
-const proyectoRepository = new ProyectoRepository();
-const proyectoService = new ProyectoService(proyectoRepository);
-const proyectoController = new ProyectoController(proyectoService);
+const PORT = process.env.PORT || 3000;
+ 
+app.use(cors())
+// Middleware para parsear JSON
+app.use(bodyParser.json()); 
+app.use(express.json());
 
 // Rutas
-app.post('/proyectos', (req, res) => proyectoController.crearProyecto(req, res));
-app.get('/proyectos/:id', (req, res) => proyectoController.obtenerProyecto(req, res));
+app.use('/proyectos', proyectoRoutes);
+app.use('/celula_proyecto', celulaProyectoRoutes);
+app.use('/empleados', empleadoRoutes);
+app.use('/secuencias', secuenciaRoutes);
+app.use('/categorias', categotiaRoutes);
+app.use('/experimento_tipo', experimentosTipoRoutes);
+app.use('/testing_card', testingCardRoutes)
+app.use('/learning_card', learningCardRoutes)
+app.use('/metrica_testing_card', metricaTestingCardRoutes)
 
-// Manejo de errores genérico
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ success: false, message: 'Algo salió mal!' });
+// Ruta básica de prueba
+app.get('/', (req, res) => {
+  res.send('API funcionando');
 });
-
-// Inicia el servidor
-const PORT = process.env.PORT || 3000;
+ 
+// Manejo de errores
+app.use(errorHandler);
+ 
+// Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

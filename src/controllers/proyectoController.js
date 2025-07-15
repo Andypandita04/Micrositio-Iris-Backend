@@ -1,58 +1,103 @@
+// src/controllers/proyectoController.js
+import ProyectoService from '../services/proyectoService.js';
+import { proyectoCreateSchema, proyectoUpdateSchema } from '../middlewares/validation/proyectoSchema.js';
+import ApiError from '../utils/ApiError.js';
+
 class ProyectoController {
-  /**
-   * @param {ProyectoService} proyectoService - Inyectamos el servicio.
-   */
-  constructor(proyectoService) {
-    this.proyectoService = proyectoService;
+  constructor() {
+    this.proyectoService = new ProyectoService();
   }
 
   /**
-   * Maneja la creación de un proyecto (POST /proyectos).
-   * @param {Object} req - Request de Express.
-   * @param {Object} res - Response de Express.
+   * Obtiene un proyecto por su ID
+   * @param {Object} req - Request de Express
+   * @param {Object} res - Response de Express
+   * @param {Function} next - Next middleware
    */
-  async crearProyecto(req, res) {
+  async obtenerProyecto(req, res, next) {
     try {
-      const proyecto = await this.proyectoService.crearProyecto(req.body);
-      res.status(201).json({
-        success: true,
-        data: proyecto,
-      });
+      const id_proyecto = Number(req.body.id_proyecto);
+      if (!id_proyecto) {
+        throw new ApiError('Se requiere el campo "id_proyecto" en el body', 400);
+      }
+      const proyecto = await this.proyectoService.obtenerProyecto(id_proyecto);
+      res.json(proyecto);
     } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error.message,
-      });
+      next(error);
     }
   }
 
   /**
-   * Maneja la obtención de un proyecto (GET /proyectos/:id).
-   * @param {Object} req - Request de Express.
-   * @param {Object} res - Response de Express.
+   * Crea un nuevo proyecto
+   * @param {Object} req - Request de Express
+   * @param {Object} res - Response de Express
+   * @param {Function} next - Next middleware
    */
-  async obtenerProyecto(req, res) {
+  async crearProyecto(req, res, next) {
     try {
-      const proyecto = await this.proyectoService.obtenerProyecto(req.params.id);
-      
-      if (!proyecto) {
-        return res.status(404).json({
-          success: false,
-          message: 'Proyecto no encontrado',
-        });
+      const validatedData = proyectoCreateSchema.parse(req.body);
+      const proyecto = await this.proyectoService.crearProyecto(validatedData);
+      res.status(201).json(proyecto);
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
+  /**
+   * Actualiza un proyecto existente
+   * @param {Object} req - Request de Express
+   * @param {Object} res - Response de Express
+   * @param {Function} next - Next middleware
+   */
+  async actualizarProyecto(req, res, next) {
+    try {
+      if (!req.body.id_proyecto) {
+        throw new ApiError('Se requiere el campo "id_proyecto" en el body', 400);
       }
 
-      res.status(200).json({
-        success: true,
-        data: proyecto,
-      });
+      const { id_proyecto, ...updateData } = req.body;
+      const validatedData = proyectoUpdateSchema.parse(updateData);
+      const proyecto = await this.proyectoService.actualizarProyecto(id_proyecto, validatedData);
+      res.json(proyecto);
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: 'Error interno del servidor',
-      });
+      next(error);
+    }
+  }
+
+  /**
+   * Elimina un proyecto
+   * @param {Object} req - Request de Express
+   * @param {Object} res - Response de Express
+   * @param {Function} next - Next middleware
+   */
+  async eliminarProyecto(req, res, next) {
+    try {
+      if (!req.body.id_proyecto) {
+        throw new ApiError('Se requiere el campo "id_proyecto" en el body', 400);
+      }
+
+      await this.proyectoService.eliminarProyecto(req.body.id_proyecto);
+      res.status(204).end();
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Lista todos los proyectos
+   * @param {Object} req - Request de Express
+   * @param {Object} res - Response de Express
+   * @param {Function} next - Next middleware
+   */
+  async listarProyectos(req, res, next) {
+    try {
+      const proyectos = await this.proyectoService.listarProyectos();
+      res.json(proyectos);
+    } catch (error) {
+      next(error);
     }
   }
 }
 
-module.exports = ProyectoController;
+export default ProyectoController;

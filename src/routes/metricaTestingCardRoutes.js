@@ -1,0 +1,153 @@
+// src/routes/metricaTestingCardRoutes.js
+import express from 'express';
+import MetricaTestingCardController from '../controllers/metricaTestingCardController.js';
+
+const router = express.Router();
+const controller = new MetricaTestingCardController();
+
+/**
+ * @swagger
+ * tags:
+ *   name: MetricasTestingCard
+ *   description: Endpoints para manejar métricas de testing cards
+ */
+
+/**
+ * @swagger
+ * /metrica_testing_card/t:
+ *   get:
+ *     summary: Obtiene métricas por testing card
+ *     tags: [MetricasTestingCard]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_testing_card
+ *             properties:
+ *               id_testing_card:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Lista de métricas
+ *       404:
+ *         description: Testing card no encontrada o sin métricas
+ */
+router.get('/t', controller.obtenerPorTestingCard.bind(controller));
+
+/**
+ * @swagger
+ * /metrica_testing_card/m:
+ *   get:
+ *     summary: Obtiene una métrica por su ID
+ *     tags: [MetricasTestingCard]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_metrica_testing_card
+ *             properties:
+ *               id_metrica_testing_card:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Métrica encontrada
+ *       404:
+ *         description: Métrica no encontrada
+ */
+router.get('/m', controller.obtenerPorId.bind(controller));
+
+/**
+ * @swagger
+ * /metrica_testing_card:
+ *   get:
+ *     summary: Obtiene todas las métricas
+ *     tags: [MetricasTestingCard]
+ *     responses:
+ *       200:
+ *         description: Lista de todas las métricas
+ */
+router.get('/', controller.obtenerTodas.bind(controller));
+
+/**
+ * @swagger
+ * /metrica_testing_card:
+ *   post:
+ *     summary: Crea una nueva métrica
+ *     tags: [MetricasTestingCard]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/MetricaTestingCard'
+ *     responses:
+ *       201:
+ *         description: Métrica creada
+ *       404:
+ *         description: Testing card no encontrada
+ */
+router.post('/', controller.crear.bind(controller));
+
+/**
+ * @swagger
+ * /metrica_testing_card:
+ *   patch:
+ *     summary: Actualiza una métrica
+ *     tags: [MetricasTestingCard]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_metrica_testing_card
+ *             properties:
+ *               id_metrica_testing_card:
+ *                 type: integer
+ *               nombre:
+ *                 type: string
+ *               operador:
+ *                 type: string
+ *               criterio:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Métrica actualizada
+ *       404:
+ *         description: Métrica no encontrada
+ */
+router.patch('/', controller.actualizar.bind(controller));
+
+/**
+ * @swagger
+ * /metrica_testing_card:
+ *   delete:
+ *     summary: Elimina una métrica
+ *     tags: [MetricasTestingCard]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_metrica_testing_card
+ *             properties:
+ *               id_metrica_testing_card:
+ *                 type: integer
+ *     responses:
+ *       204:
+ *         description: Métrica eliminada
+ *       404:
+ *         description: Métrica no encontrada
+ */
+router.delete('/', controller.eliminar.bind(controller));
+
+export default router;

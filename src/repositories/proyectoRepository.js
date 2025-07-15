@@ -1,56 +1,75 @@
-// Importar el SDK de Firebase Admin para interactuar con Firestore
-const admin = require('firebase-admin');
-
-// Inicializar Firebase (asegúrate de que ya está inicializado en app.js)
-const db = admin.firestore();
+// src/repositories/proyectoRepository.js
+import supabase from '../config/supabaseClient.js';
+import ApiError from '../utils/ApiError.js';
+import Proyecto from '../models/Proyecto.js';
 
 class ProyectoRepository {
-  /**
-   * Crea un nuevo proyecto en Firestore.
-   * @param {Object} proyectoData - Datos del proyecto { nombre, descripcion }.
-   * @returns {Promise<Object>} - Retorna el proyecto creado con su ID generado por Firestore.
-   */
-  async crearProyecto(proyectoData) {
-    try {
-      // Agrega un documento a la colección 'proyectos'. Firestore genera el ID automáticamente.
-      const docRef = await db.collection('proyectos').add(proyectoData);
-      
-      // Retorna el objeto proyecto con el ID asignado por Firestore
-      return { 
-        id: docRef.id, 
-        nombre: proyectoData.nombre, 
-        descripcion: proyectoData.descripcion 
-      };
-    } catch (error) {
-      console.error('Error en ProyectoRepository.crearProyecto:', error);
-      throw new Error('Error al crear el proyecto en Firestore');
+  async obtenerPorId(id_proyecto) {
+    const { data, error } = await supabase
+      .from('proyecto')
+      .select('*')
+      .eq('id_proyecto', id_proyecto)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      throw new ApiError(`Error al obtener proyecto: ${error.message}`, 500);
     }
+
+    return data ? Proyecto.fromDatabase(data) : null;
   }
 
-  /**
-   * Obtiene un proyecto por su ID.
-   * @param {string} proyectoId - ID del proyecto a buscar.
-   * @returns {Promise<Object|null>} - Retorna el proyecto o null si no existe.
-   */
-  async obtenerProyectoPorId(proyectoId) {
-    try {
-      const doc = await db.collection('proyectos').doc(proyectoId).get();
-      
-      // Si el documento no existe, retorna null
-      if (!doc.exists) {
-        return null;
-      }
-      
-      // Retorna el proyecto con sus datos y ID
-      return { 
-        id: doc.id, 
-        ...doc.data() 
-      };
-    } catch (error) {
-      console.error('Error en ProyectoRepository.obtenerProyectoPorId:', error);
-      throw new Error('Error al obtener el proyecto de Firestore');
+  async crear(proyectoData) {
+    const { data, error } = await supabase
+      .from('proyecto')
+      .insert(proyectoData)
+      .select();
+
+    if (error) {
+      throw new ApiError(`Error al crear proyecto: ${error.message}`, 500);
     }
+
+    return Proyecto.fromDatabase(data[0]);
+  }
+
+  async actualizar(id_proyecto, proyectoData) {
+    const { data, error } = await supabase
+      .from('proyecto')
+      .update(proyectoData)
+      .eq('id_proyecto', id_proyecto)
+      .select();
+
+    if (error) {
+      throw new ApiError(`Error al actualizar proyecto: ${error.message}`, 500);
+    }
+
+    return data ? Proyecto.fromDatabase(data[0]) : null;
+  }
+
+  async eliminar(id_proyecto) {
+    const { data, error } = await supabase
+      .from('proyecto')
+      .delete()
+      .eq('id_proyecto', id_proyecto)
+      .select();
+
+    if (error) {
+      throw new ApiError(`Error al eliminar proyecto: ${error.message}`, 500);
+    }
+
+    return data ? Proyecto.fromDatabase(data[0]) : null;
+  }
+
+  async listarTodos() {
+    const { data, error } = await supabase
+      .from('proyecto')
+      .select('*');
+
+    if (error) {
+      throw new ApiError(`Error al listar proyectos: ${error.message}`, 500);
+    }
+
+    return data.map(proyecto => Proyecto.fromDatabase(proyecto));
   }
 }
 
-module.exports = ProyectoRepository;
+export default ProyectoRepository;
