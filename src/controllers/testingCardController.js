@@ -21,18 +21,24 @@ class TestingCardController {
     }
   }
 
-  async obtenerPorSecuencia(req, res, next) {
-    try {
-      if (!req.body.id_secuencia) {
-        throw new ApiError('Se requiere el campo "id_secuencia" en el body', 400);
-      }
-
-      const testingCards = await this.testingCardService.obtenerPorSecuencia(req.body.id_secuencia);
-      res.json(testingCards);
-    } catch (error) {
-      next(error);
+ async obtenerPorSecuencia(req, res, next) {
+  try {
+    // Cambia esto:
+    // if (!req.body.id_secuencia) {
+    //   throw new ApiError('Se requiere el campo "id_secuencia" en el body', 400);
+    // }
+    // Por esto:
+    const idSecuencia = req.query.id_secuencia;
+    if (!idSecuencia) {
+      throw new ApiError('Se requiere el parámetro "id_secuencia" en la query', 400);
     }
+
+    const testingCards = await this.testingCardService.obtenerPorSecuencia(idSecuencia);
+    res.json(testingCards);
+  } catch (error) {
+    next(error);
   }
+}
 
   async obtenerPorPadre(req, res, next) {
     try {
