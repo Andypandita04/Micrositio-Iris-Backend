@@ -1,11 +1,13 @@
 // src/controllers/testingCardController.js
 import TestingCardService from '../services/testingCardService.js';
+import TestingCardRepository from '../repositories/testingCardRepository.js';
 import { testingCardBaseSchema, testingCardUpdateSchema } from '../middlewares/validation/testingCardSchema.js';
 import ApiError from '../utils/ApiError.js';
 
 class TestingCardController {
   constructor() {
     this.testingCardService = new TestingCardService();
+    this.testingCardRepository = new TestingCardRepository(); // Agregar esta línea
   }
 
   async obtenerPorId(req, res, next) {
@@ -68,30 +70,25 @@ class TestingCardController {
     }
   }
 
- // En testingCardController.js
-async actualizar(req, res) {
-  console.log('Body recibido:', req.body);
-  console.log('id_testing_card del body:', req.body.id_testing_card);
-  try {
-    // Leer id_testing_card del body
-    const { id_testing_card, ...updateData } = req.body;
-    
-    if (!id_testing_card) {
-      return res.status(400).json({ error: 'id_testing_card es requerido' });
+  async actualizar(req, res, next) {
+    try {
+      const { id_testing_card } = req.params;
+      const testingCardData = req.body;
+
+      console.log('ID Testing Card:', id_testing_card);
+      console.log('Datos para actualizar:', testingCardData);
+
+      if (!this.testingCardRepository) {
+        throw new Error('Repositorio de Testing Card no definido');
+      }
+
+      const resultado = await this.testingCardRepository.actualizar(id_testing_card, testingCardData);
+      res.status(200).json(resultado);
+    } catch (error) {
+      console.error('Error en actualizar:', error);
+      next(error);
     }
-    
-    const updatedCard = await this.testingCardRepository.actualizar(id_testing_card, updateData);
-    
-    if (!updatedCard) {
-      return res.status(404).json({ error: 'Testing card no encontrada' });
-    }
-    
-    res.json(updatedCard);
-  } catch (error) {
-    console.error('Error en actualizar:', error);
-    res.status(500).json({ error: error.message });
   }
-}
 
   async eliminar(req, res, next) {
     try {

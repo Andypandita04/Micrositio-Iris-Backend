@@ -70,17 +70,11 @@ class TestingCardRepository {
   }
 
   async actualizar(id_testing_card, testingCardData) {
-    const { data, error } = await supabase
-      .from('testing_card')
-      .update(testingCardData)
-      .eq('id_testing_card', id_testing_card)
-      .select();
-
-    if (error) {
-      throw new ApiError(`Error al actualizar testing card: ${error.message}`, 500);
-    }
-
-    return data ? TestingCard.fromDatabase(data[0]) : null;
+    // Implementación para actualizar la Testing Card en la base de datos
+    // Ejemplo usando un ORM o consulta SQL:
+    return await db.testingCards.update(testingCardData, {
+      where: { id_testing_card }
+    });
   }
 
   async eliminar(id_testing_card) {

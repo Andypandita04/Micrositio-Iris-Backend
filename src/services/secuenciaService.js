@@ -75,12 +75,12 @@ class SecuenciaService {
 
       // 4. Crear la testing card asociada con valores por defecto
       const testingCardData = {
-        id_secuencia: nuevaSecuencia.id_secuencia,
+        id_secuencia: nuevaSecuencia.id_secuencia, // Asegúrate de que este valor no sea null o undefined
         titulo: `Testing Card - ${nuevaSecuencia.nombre}`,
         hipotesis: '',
         descripcion: '',
         status: 'En desarrollo',
-        id_experimento_tipo, // Ahora es válido
+        id_experimento_tipo,
         padre_id: null,
         dia_inicio: null,
         dia_fin: null,

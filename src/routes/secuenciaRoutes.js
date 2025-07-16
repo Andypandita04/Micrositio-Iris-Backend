@@ -1,7 +1,6 @@
 // src/routes/secuenciaRoutes.js
 import express from 'express';
 import SecuenciaController from '../controllers/secuenciaController.js';
-import Secuencia from '../models/Secuencia.js';
 
 const router = express.Router();
 const secuenciaController = new SecuenciaController();
@@ -159,5 +158,45 @@ router.patch('/', secuenciaController.actualizar.bind(secuenciaController));
  *         description: Secuencia no encontrada
  */
 router.delete('/', secuenciaController.eliminar.bind(secuenciaController));
+
+/**
+ * @swagger
+ * /secuencia/crear-con-testing-card:
+ *   post:
+ *     summary: Crea una nueva secuencia con una testing card asociada
+ *     tags: [Secuencias]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_proyecto
+ *               - nombre
+ *               - descripcion
+ *               - id_testing_card_padre
+ *             properties:
+ *               id_proyecto:
+ *                 type: integer
+ *                 description: ID del proyecto
+ *               nombre:
+ *                 type: string
+ *                 description: Nombre de la secuencia
+ *               descripcion:
+ *                 type: string
+ *                 description: Descripción de la secuencia
+ *               id_testing_card_padre:
+ *                 type: integer
+ *                 description: ID de la testing card padre
+ *     responses:
+ *       201:
+ *         description: Secuencia y testing card creadas
+ *       400:
+ *         description: Datos inválidos
+ *       404:
+ *         description: Proyecto no encontrado
+ */
+router.post('/crear-con-testing-card', secuenciaController.crear.bind(secuenciaController));
 
 export default router;
