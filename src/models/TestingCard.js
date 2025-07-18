@@ -57,7 +57,7 @@ class TestingCard {
 
   toAPI() {
     return {
-      id: this.id_testing_card,
+      id_testing_card: this.id_testing_card,
       id_secuencia: this.id_secuencia,
       padre_id: this.padre_id,
       titulo: this.titulo,

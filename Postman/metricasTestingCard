@@ -1,0 +1,150 @@
+{
+  "info": {
+    "_postman_id": "d4e5f6g7-h8i9-j0k1-l2m3n4o5p6q7",
+    "name": "API Metricas Testing Card",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Obtener métricas por testing card",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_testing_card\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/metrica_testing_card/t",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["metrica_testing_card", "t"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener métrica por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_metrica_testing_card\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/metrica_testing_card/m",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["metrica_testing_card", "m"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener todas las métricas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/metrica_testing_card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["metrica_testing_card"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear métrica",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_testing_card\": 1,\n  \"nombre\": \"Metrica 1\",\n  \"operador\": \"=\",\n  \"criterio\": \"El valor debe ser igual a 10\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/metrica_testing_card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["metrica_testing_card"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar métrica",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_metrica_testing_card\": 1,\n  \"nombre\": \"Metrica Actualizada\",\n  \"operador\": \"!=\",\n  \"criterio\": \"El valor debe ser diferente de 10\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/metrica_testing_card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["metrica_testing_card"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar métrica",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_metrica_testing_card\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/metrica_testing_card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["metrica_testing_card"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    }
+  ]
+}
