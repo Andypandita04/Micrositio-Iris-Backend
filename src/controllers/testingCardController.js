@@ -1,6 +1,6 @@
 // src/controllers/testingCardController.js
 import TestingCardService from '../services/testingCardService.js';
-import { testingCardCreateSchema, testingCardUpdateSchema } from '../middlewares/validation/testingCardSchema.js';
+import { testingCardBaseSchema, testingCardUpdateSchema } from '../middlewares/validation/testingCardSchema.js';
 import ApiError from '../utils/ApiError.js';
 
 class TestingCardController {
@@ -21,18 +21,24 @@ class TestingCardController {
     }
   }
 
-  async obtenerPorSecuencia(req, res, next) {
-    try {
-      if (!req.body.id_secuencia) {
-        throw new ApiError('Se requiere el campo "id_secuencia" en el body', 400);
-      }
-
-      const testingCards = await this.testingCardService.obtenerPorSecuencia(req.body.id_secuencia);
-      res.json(testingCards);
-    } catch (error) {
-      next(error);
+ async obtenerPorSecuencia(req, res, next) {
+  try {
+    // Cambia esto:
+    // if (!req.body.id_secuencia) {
+    //   throw new ApiError('Se requiere el campo "id_secuencia" en el body', 400);
+    // }
+    // Por esto:
+    const idSecuencia = req.query.id_secuencia;
+    if (!idSecuencia) {
+      throw new ApiError('Se requiere el parámetro "id_secuencia" en la query', 400);
     }
+
+    const testingCards = await this.testingCardService.obtenerPorSecuencia(idSecuencia);
+    res.json(testingCards);
+  } catch (error) {
+    next(error);
   }
+}
 
   async obtenerPorPadre(req, res, next) {
     try {
@@ -58,7 +64,7 @@ class TestingCardController {
 
   async crear(req, res, next) {
     try {
-      const validatedData = testingCardCreateSchema.parse(req.body);
+      const validatedData = testingCardBaseSchema.parse(req.body);
       const testingCard = await this.testingCardService.crear(validatedData);
       res.status(201).json(testingCard);
     } catch (error) {
