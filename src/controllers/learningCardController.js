@@ -15,12 +15,13 @@ class LearningCardController {
    */
   async obtenerPorTestingCard(req, res, next) {
     try {
-      if (!req.body.id_testing_card) {
-        throw new ApiError('Se requiere id_testing_card en el body', 400);
+      const idTestingCard = Number(req.query.id_testing_card);
+      if (!idTestingCard) {
+        throw new ApiError('Se requiere el parámetro "id_testing_card" en la query', 400);
       }
 
-      const learningCard = await this.learningCardService.obtenerPorTestingCard(req.body.id_testing_card);
-      res.json(learningCard);
+      const learningCards = await this.learningCardService.obtenerPorTestingCard(idTestingCard);
+      res.json(learningCards);
     } catch (error) {
       next(error);
     }
