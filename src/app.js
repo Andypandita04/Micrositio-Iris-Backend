@@ -12,6 +12,7 @@ import learningCardRoutes from './routes/learningCardRoutes.js';
 import metricaTestingCardRoutes from './routes/metricaTestingCardRoutes.js';
 import errorHandler from './middlewares/errorHandler.js';
 import bodyParser from 'body-parser'; 
+import testigCardPlaybookRoutes from './routes/testigCardPlaybookRoutes.js';
  
  
  
@@ -33,9 +34,10 @@ app.use('/empleados', empleadoRoutes);
 app.use('/secuencias', secuenciaRoutes);
 app.use('/categorias', categotiaRoutes);
 app.use('/experimento_tipo', experimentosTipoRoutes);
-app.use('/testing_card', testingCardRoutes)
-app.use('/learning_card', learningCardRoutes)
-app.use('/metrica_testing_card', metricaTestingCardRoutes)
+app.use('/testing_card', testingCardRoutes);
+app.use('/learning_card', learningCardRoutes);
+app.use('/metrica_testing_card', metricaTestingCardRoutes);
+app.use('/testing_card_playbook', testigCardPlaybookRoutes); // <-- Añadido
 
 // Ruta básica de prueba
 app.get('/', (req, res) => {
