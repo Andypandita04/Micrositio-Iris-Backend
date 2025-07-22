@@ -20,29 +20,24 @@ class LearningCardService {
    * @throws {ApiError} Si no existe testing card o learning card
    */
     async obtenerPorTestingCard(idTestingCard) {
-    // Validar que el ID es un número válido
     if (!Number.isInteger(idTestingCard)) {
-        throw new ApiError('ID de testing card inválido', 400);
+      throw new ApiError('ID de testing card inválido', 400);
     }
 
     // Verificar que existe la testing card
     const testingCard = await this.testingCardRepo.obtenerPorId(idTestingCard);
     if (!testingCard) {
-        throw new ApiError('Testing card no encontrada', 404);
+      throw new ApiError('Testing card no encontrada', 404);
     }
 
-    // Obtener learning card
-    const learningCard = await this.learningCardRepo.obtenerPorTestingCard(idTestingCard);
-    if (!learningCard) {
-        throw new ApiError('No existe learning card para esta testing card', 404);
+    // Obtener todas las learning cards asociadas
+    const learningCards = await this.learningCardRepo.obtenerPorTestingCard(idTestingCard);
+    if (!learningCards || learningCards.length === 0) {
+      throw new ApiError('No existen learning cards para esta testing card', 404);
     }
 
-    // Verificar que la learning card tiene datos válidos
-    if (!learningCard.id_learning_card) {
-        throw new ApiError('Datos de learning card inválidos', 500);
-    }
-
-    return learningCard.toAPI();
+    // Retornar todas las learning cards en formato API
+    return learningCards.map(lc => lc.toAPI());
     }
 
 
