@@ -1,0 +1,154 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "API URL Testing Card",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Obtener URLs por testing card",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/url_testing_card/t?id_testing_card=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["url_testing_card", "t"],
+          "query": [
+            {
+              "key": "id_testing_card",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener URL por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/url_testing_card/u?id_url_tc=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["url_testing_card", "u"],
+          "query": [
+            {
+              "key": "id_url_tc",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener todas las URLs",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/url_testing_card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["url_testing_card"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear URL",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_testing_card\": 1,\n  \"url\": \"https://ejemplo.com/test1\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/url_testing_card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["url_testing_card"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar URL",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_url_tc\": 1,\n  \"url\": \"https://ejemplo.com/test-actualizado\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/url_testing_card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["url_testing_card"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar URL",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_url_tc\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/url_testing_card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["url_testing_card"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    }
+  ]
+}
