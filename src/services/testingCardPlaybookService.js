@@ -13,6 +13,10 @@ class TestingCardPlaybookService {
     return await this.repository.obtenerPorPagina(pagina);
   }
 
+  async buscarPorTipo(tipo) {
+    return await this.repository.buscarPorTipo(tipo);
+  }
+
   async buscarPorCampo(campo) {
     return await this.repository.buscarPorCampo(campo);
   }

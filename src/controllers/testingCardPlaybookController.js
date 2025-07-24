@@ -9,9 +9,10 @@ class TestingCardPlaybookController {
   // Listar todos los registros
   async listarTodos(req, res, next) {
     try {
-      const playbooks = await this.testingCardPlaybookService.listarTodos();
-      res.json(playbooks);
+      const datos = await this.testingCardPlaybookService.listarTodos();
+      res.json(datos);
     } catch (error) {
+      console.error('Error en listarTodos:', error); // <-- Agrega este log
       next(error);
     }
   }
@@ -46,6 +47,21 @@ class TestingCardPlaybookController {
       next(error);
     }
   }
+
+  // Buscar por tipo (nuevo método)
+  async buscarPorTipo(req, res, next) {
+    try {
+      const { tipo } = req.query;
+      if (!tipo) {
+        throw new ApiError('Se requiere el parámetro "tipo" en la query', 400);
+      }
+      const playbooks = await this.testingCardPlaybookService.buscarPorTipo(tipo);
+      res.json(playbooks);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default TestingCardPlaybookController;
+

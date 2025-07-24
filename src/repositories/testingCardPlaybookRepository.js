@@ -1,16 +1,43 @@
-import TestingCardPlaybook from '../models/testing_card_plabook.js';
+import supabase from '../config/supabaseClient.js';
 
 class TestingCardPlaybookRepository {
   async listarTodos() {
-    return await TestingCardPlaybook.findAll();
+    const { data, error } = await supabase
+      .from('testing_card_playbook')
+      .select('*');
+    if (error) throw error;
+    return data;
   }
 
   async obtenerPorPagina(pagina) {
-    return await TestingCardPlaybook.findOne({ where: { pagina } });
+    const { data, error } = await supabase
+      .from('testing_card_playbook')
+      .select('*')
+      .eq('pagina', pagina)
+      .single();
+    if (error) {
+      console.error('Error en obtenerPorPagina:', error);
+      throw error;
+    }
+    return data;
   }
 
   async buscarPorCampo(campo) {
-    return await TestingCardPlaybook.findAll({ where: { campo } });
+    const { data, error } = await supabase
+      .from('testing_card_playbook')
+      .select('*')
+      .eq('campo', campo);
+    if (error) throw error;
+    return data;
+  }
+
+   async buscarPorTipo(tipo) {
+    const { data, error } = await supabase
+      .from('testing_card_playbook')
+      .select('*')
+      .eq('tipo', tipo);
+    if (error) throw error;
+    return data;
   }
 }
 
