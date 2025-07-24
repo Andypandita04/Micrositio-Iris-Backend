@@ -15,6 +15,7 @@ import urlLearningCardRoutes from './routes/urlLearningCardRoutes.js';
 import errorHandler from './middlewares/errorHandler.js';
 import bodyParser from 'body-parser'; 
 import nodePositionRoutes from './routes/nodePositionRoutes.js';
+import testingCardPlaybookRoutes from './routes/testingCardPlaybookRoutes.js';
  
  
  
