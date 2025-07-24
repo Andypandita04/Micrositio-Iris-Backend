@@ -10,9 +10,11 @@ import experimentosTipoRoutes from './routes/experimentoTipoRoutes.js'
 import testingCardRoutes from './routes/testingCardRoutes.js';
 import learningCardRoutes from './routes/learningCardRoutes.js';
 import metricaTestingCardRoutes from './routes/metricaTestingCardRoutes.js';
+import urlTestingCardRoutes from './routes/urlTestingCardRoutes.js';
+import urlLearningCardRoutes from './routes/urlLearningCardRoutes.js';
 import errorHandler from './middlewares/errorHandler.js';
 import bodyParser from 'body-parser'; 
-import testingCardPlaybookRoutes from './routes/testingCardPlaybookRoutes.js';
+import nodePositionRoutes from './routes/nodePositionRoutes.js';
  
  
  
@@ -34,10 +36,12 @@ app.use('/empleados', empleadoRoutes);
 app.use('/secuencias', secuenciaRoutes);
 app.use('/categorias', categotiaRoutes);
 app.use('/experimento_tipo', experimentosTipoRoutes);
-app.use('/testing_card', testingCardRoutes);
-app.use('/learning_card', learningCardRoutes);
-app.use('/metrica_testing_card', metricaTestingCardRoutes);
-app.use('/testing_card_playbook', testingCardPlaybookRoutes); // <-- Añadido
+app.use('/testing_card', testingCardRoutes)
+app.use('/learning_card', learningCardRoutes)
+app.use('/metrica_testing_card', metricaTestingCardRoutes)
+app.use('/url_testing_card', urlTestingCardRoutes)
+app.use('/url_learning_card', urlLearningCardRoutes)
+app.use('/flow-positions', nodePositionRoutes)
 
 // Ruta básica de prueba
 app.get('/', (req, res) => {

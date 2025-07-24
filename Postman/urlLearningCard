@@ -1,0 +1,154 @@
+{
+  "info": {
+    "_postman_id": "b2c3d4e5-f6g7-8901-bcde-f12345678901",
+    "name": "API URL Learning Card",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Obtener URLs por learning card",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/url_learning_card/l?id_learning_card=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["url_learning_card", "l"],
+          "query": [
+            {
+              "key": "id_learning_card",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener URL por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/url_learning_card/u?id_url_lc=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["url_learning_card", "u"],
+          "query": [
+            {
+              "key": "id_url_lc",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener todas las URLs",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/url_learning_card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["url_learning_card"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear URL",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_learning_card\": 1,\n  \"url\": \"https://ejemplo.com/learning1\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/url_learning_card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["url_learning_card"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar URL",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_url_lc\": 1,\n  \"url\": \"https://ejemplo.com/learning-actualizado\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/url_learning_card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["url_learning_card"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar URL",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_url_lc\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/url_learning_card",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["url_learning_card"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    }
+  ]
+}

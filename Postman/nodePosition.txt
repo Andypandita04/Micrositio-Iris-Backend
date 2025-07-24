@@ -1,0 +1,61 @@
+{
+  "info": {
+    "name": "Flow Positions API",
+    "_postman_id": "f1e2d3c4-b5a6-7890-1234-56789abcdef0",
+    "description": "Colección para probar los endpoints de flow-positions",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Obtener posiciones de una secuencia",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/flow-positions/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["flow-positions", "1"]
+        }
+      }
+    },
+    {
+      "name": "Crear/Actualizar posición de nodo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_secuencia\": 1,\n  \"node_type\": \"learning\",\n  \"node_id\": 5,\n  \"position_x\": 120.5,\n  \"position_y\": 300.0\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/flow-positions",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["flow-positions"]
+        }
+      }
+    },
+    {
+      "name": "Eliminar posiciones de una secuencia",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/flow-positions/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["flow-positions", "1"]
+        }
+      }
+    }
+  ]
+}

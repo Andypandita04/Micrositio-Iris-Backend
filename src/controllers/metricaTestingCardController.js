@@ -16,11 +16,13 @@ class MetricaTestingCardController {
    */
   async obtenerPorTestingCard(req, res, next) {
     try {
-      if (!req.body.id_testing_card) {
-        throw new ApiError('Se requiere el campo id_testing_card en el body', 400);
+      const { id_testing_card } = req.query;
+
+      if (!id_testing_card) {
+        throw new ApiError('Se requiere el campo id_testing_card en el query', 400);
       }
 
-      const metricas = await this.metricaService.obtenerPorTestingCard(req.body.id_testing_card);
+      const metricas = await this.metricaService.obtenerPorTestingCard(id_testing_card);
       res.json(metricas);
     } catch (error) {
       next(error);
@@ -35,11 +37,13 @@ class MetricaTestingCardController {
    */
   async obtenerPorId(req, res, next) {
     try {
-      if (!req.body.id_metrica_testing_card) {
-        throw new ApiError('Se requiere el campo id_metrica_testing_card en el body', 400);
+      const { id_metrica_testing_card } = req.query;
+
+      if (!id_metrica_testing_card) {
+        throw new ApiError('Se requiere el campo id_metrica_testing_card en el query', 400);
       }
 
-      const metrica = await this.metricaService.obtenerPorId(req.body.id_metrica_testing_card);
+      const metrica = await this.metricaService.obtenerPorId(id_metrica_testing_card);
       res.json(metrica);
     } catch (error) {
       next(error);
