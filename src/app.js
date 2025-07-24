@@ -42,6 +42,7 @@ app.use('/metrica_testing_card', metricaTestingCardRoutes)
 app.use('/url_testing_card', urlTestingCardRoutes)
 app.use('/url_learning_card', urlLearningCardRoutes)
 app.use('/flow-positions', nodePositionRoutes)
+app.use('/testing_card_playbook', testingCardPlaybookRoutes);
 
 // Ruta básica de prueba
 app.get('/', (req, res) => {
