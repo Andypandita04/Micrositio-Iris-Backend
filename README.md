@@ -66,6 +66,8 @@ git clone https://github.com/tu-org/micrositio-iris-backend.git
 
 # 2. Instalar dependencias
 npm install
+npm install multer
+npm install uuid
 
 # 3. Configurar entorno (crear archivo .env)
 cp .env.example .env

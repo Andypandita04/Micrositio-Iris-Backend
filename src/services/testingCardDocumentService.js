@@ -35,9 +35,7 @@ class TestingCardDocumentService {
         .getPublicUrl(filePath);
 
       // Determinar tipo de documento basado en mimetype
-      const documentType = this.getDocumentType(file.mimetype);
-
-      // Crear registro en la base de datos
+      const documentType = this.getDocumentType(file.mimetype);      // Crear registro en la base de datos
       const documentData = {
         testing_card_id: parseInt(testingCardId),
         document_name: file.originalname,
@@ -45,6 +43,9 @@ class TestingCardDocumentService {
         document_type: documentType
       };
 
+      // console.log('📊 Datos que se van a insertar:', documentData);
+      // console.log('🔍 testing_card_id tipo:', typeof documentData.testing_card_id);
+      
       const document = await testingCardDocumentRepository.create(documentData);
       return document;
 

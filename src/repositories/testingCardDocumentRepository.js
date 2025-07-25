@@ -2,18 +2,22 @@ import supabase from '../config/supabaseClient.js';
 import TestingCardDocument from '../models/TestingCardDocument.js';
 
 class TestingCardDocumentRepository {
-  
   async create(documentData) {
     try {
+      // console.log('🔍 Repository - Datos recibidos:', documentData);
+      
       const { data, error } = await supabase
         .from('testing_card_documents')
         .insert(documentData)
         .select('*')
         .single();
 
+      // console.log('📊 Repository - Respuesta Supabase:', { data, error });
+      
       if (error) throw error;
       return TestingCardDocument.fromDatabase(data);
     } catch (error) {
+      // console.error('❌ Repository - Error completo:', error);
       throw new Error(`Error al crear documento: ${error.message}`);
     }
   }
