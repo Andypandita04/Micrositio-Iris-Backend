@@ -1,28 +1,23 @@
 ### **Contexto**  
-Bajo el mismo proyecto y manteniendo coherencia con la estructura existente de "proyectos", "empleados", etc. Necesito implementar  endpoints para la tabla `metrica_testing_card`:  
-- **GET** `/metrica_testing_card/p`: Obtener por id_proyecto en el body. Si no existe proyecto, indicarlo como error
-- **GET** `/metrica_testing_card/s`: Obtener por id_metrica_testing_card en el body. Si no existe secuecnia, indicarlo como error
-- **GET** `/metrica_testing_card`: Obtener TODOS
-- **POST** `/metrica_testing_card`: Crear registro . Indicar si no existe el proyecto , el testing card
-- **DELETE** `/metrica_testing_card`: Eliminar registro
-- **PATCH** `/metrica_testing_card`: Para modificar nombre, descripcion, id_testing_card
+Bajo el mismo proyecto y manteniendo coherencia con la estructura existente de "proyectos", "empleados", etc. Necesito implementar  endpoints para la tabla `learning_card`:  
+- **GET** `/learning_card/t`: Obtener por id_testing_Card en el body. Si no existe testingcard, indicarlo:Si no tienen metricas, indicarlo
+- **GET** `/learning_card/l`: Obtener por id_learning_Card en el body. Si no existe testingcard, indicarlo:Si no tienen metricas, indicarlo
+- **GET** `/learning_card`: Obtener TODOS
+- **POST** `/learning_card`: Crear registro . Indicar si no existe la testing card ,indicarlo
+- **DELETE** `/learning_card`: Eliminar registro
+- **PATCH** `/learning_card`: Para modificar resultado, hallazgo
 
-Si no existe proyecto, indicarlo como error
+
 
 **Datos clave**:  
 - Estructura de la tabla:  
   ```sql
-
-CREATE TABLE metrica_testing_card (
-    id_metrica SERIAL PRIMARY KEY,
-    id_testing_card INTEGER NOT NULL,
-    nombre VARCHAR(20) NOT NULL,
-    operador VARCHAR(10) NOT NULL,
-    criterio TEXT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT fk_testing_card 
-        FOREIGN KEY (id_testing_card) 
-        REFERENCES testing_card(id_testing_card)
-        ON DELETE CASCADE  -- Opcional: borra métricas si se borra la testing card
+CREATE TABLE id_secuencia (
+  id SERIAL PRIMARY KEY,
+  id_secuencia INTEGER  REFERENCES secuencia(id_secuencia) ON DELETE CASCADE,
+  id_testing_card INTEGER NOT NULL REFERENCES testing_card(id_testing_card) ON DELETE CASCADE,
+  resultado TEXT,
+  hallazgo TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );

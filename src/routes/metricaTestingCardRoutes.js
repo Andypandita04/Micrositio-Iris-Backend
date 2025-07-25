@@ -18,17 +18,13 @@ const controller = new MetricaTestingCardController();
  *   get:
  *     summary: Obtiene métricas por testing card
  *     tags: [MetricasTestingCard]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - id_testing_card
- *             properties:
- *               id_testing_card:
- *                 type: integer
+ *     parameters:
+ *       - in: query
+ *         name: id_testing_card
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la testing card
  *     responses:
  *       200:
  *         description: Lista de métricas
@@ -43,17 +39,13 @@ router.get('/t', controller.obtenerPorTestingCard.bind(controller));
  *   get:
  *     summary: Obtiene una métrica por su ID
  *     tags: [MetricasTestingCard]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - id_metrica_testing_card
- *             properties:
- *               id_metrica_testing_card:
- *                 type: integer
+ *     parameters:
+ *       - in: query
+ *         name: id_metrica_testing_card
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la métrica
  *     responses:
  *       200:
  *         description: Métrica encontrada

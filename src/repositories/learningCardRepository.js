@@ -11,22 +11,7 @@ class LearningCardRepository {
    * @throws {ApiError} Si ocurre un error
    */
   async obtenerPorTestingCard(idTestingCard) {
-    const { data, error } = await supabase
-      .from('learning_card')
-      .select('*')
-      .eq('id_testing_card', idTestingCard)
-      .maybeSingle(); // Usamos maybeSingle para obtener 0 o 1 registro
-
-    if (error) {
-      throw new ApiError(`Error al obtener learning card: ${error.message}`, 500);
-    }
-
-    // Verificación explícita de datos
-    if (!data || Object.keys(data).length === 0) {
-      return null;
-    }
-
-    return new LearningCard(data);
+    return await this.model.findAll({ where: { id_testing_card: idTestingCard } });
   }
 
   /**
@@ -141,6 +126,27 @@ class LearningCardRepository {
     }
 
     return new LearningCard(data);
+  }
+
+  /**
+   * Obtiene todas las learning cards por ID de testing card
+   * @async
+   * @param {number} idTestingCard - ID de testing card
+   * @returns {Promise<Array>} Lista de learning cards encontradas
+   * @throws {ApiError} Si ocurre un error
+   */
+  async obtenerPorTestingCard(idTestingCard) {
+    const { data, error } = await supabase
+      .from('learning_card')
+      .select('*')
+      .eq('id_testing_card', idTestingCard);
+
+    if (error) {
+      throw new ApiError(`Error al obtener learning cards: ${error.message}`, 500);
+    }
+
+    // Si no hay resultados, regresa un array vacío
+    return data.map(item => new LearningCard(item));
   }
 }
 

@@ -1,22 +1,10 @@
 import LearningCardRepository from '../repositories/learningCardRepository.js';
 import TestingCardRepository from '../repositories/testingCardRepository.js';
 import ApiError from '../utils/ApiError.js';
-import { z } from 'zod';
+import { learningCardCreateSchema, learningCardUpdateSchema } from '../middlewares/validation/learningCardSchema.js';
 
-export const learningCardCreateSchema = z.object({
-  id_secuencia: z.number().int().optional(),
-  id_testing_card: z.number().int(),
-  resultado: z.string().nullable().optional(),
-  hallazgo: z.string().nullable().optional(),
-  estado: z.enum(['CUMPLIDO', 'RECHAZADO', 'REPETIR', 'VALIDADA ']).optional().default('CUMPLIDO'), // Nuevo atributo
-});
-
-export const learningCardUpdateSchema = z.object({
-  id_learning_card: z.number().int(),
-  resultado: z.string().nullable().optional(),
-  hallazgo: z.string().nullable().optional(),
-  estado: z.enum(['CUMPLIDO', 'RECHAZADO', 'REPETIR', 'VALIDADA']).optional(), // Nuevo atributo
-});
+// Exportamos los esquemas para que otros módulos puedan usarlos
+export { learningCardCreateSchema, learningCardUpdateSchema };
 
 class LearningCardService {
   constructor() {
@@ -32,29 +20,24 @@ class LearningCardService {
    * @throws {ApiError} Si no existe testing card o learning card
    */
     async obtenerPorTestingCard(idTestingCard) {
-    // Validar que el ID es un número válido
     if (!Number.isInteger(idTestingCard)) {
-        throw new ApiError('ID de testing card inválido', 400);
+      throw new ApiError('ID de testing card inválido', 400);
     }
 
     // Verificar que existe la testing card
     const testingCard = await this.testingCardRepo.obtenerPorId(idTestingCard);
     if (!testingCard) {
-        throw new ApiError('Testing card no encontrada', 404);
+      throw new ApiError('Testing card no encontrada', 404);
     }
 
-    // Obtener learning card
-    const learningCard = await this.learningCardRepo.obtenerPorTestingCard(idTestingCard);
-    if (!learningCard) {
-        throw new ApiError('No existe learning card para esta testing card', 404);
+    // Obtener todas las learning cards asociadas
+    const learningCards = await this.learningCardRepo.obtenerPorTestingCard(idTestingCard);
+    if (!learningCards || learningCards.length === 0) {
+      throw new ApiError('No existen learning cards para esta testing card', 404);
     }
 
-    // Verificar que la learning card tiene datos válidos
-    if (!learningCard.id) {
-        throw new ApiError('Datos de learning card inválidos', 500);
-    }
-
-    return learningCard.toAPI();
+    // Retornar todas las learning cards en formato API
+    return learningCards.map(lc => lc.toAPI());
     }
 
 
@@ -130,35 +113,6 @@ class LearningCardService {
   async eliminar(id) {
     const learningCard = await this.learningCardRepo.eliminar(id);
     return learningCard.toAPI();
-  }
-}
-
-class LearningCard {
-  constructor(data = {}) {
-    this.id = data.id || null;
-    this.id_secuencia = data.id_secuencia || null;
-    this.id_testing_card = data.id_testing_card || null;
-    this.resultado = data.resultado || null;
-    this.hallazgo = data.hallazgo || null;
-    this.estado = data.estado || 'CUMPLIDO'; // Nuevo atributo
-    this.created_at = data.created_at ? new Date(data.created_at) : new Date();
-    this.updated_at = data.updated_at ? new Date(data.updated_at) : new Date();
-  }
-
-  /**
-   * Convierte los datos de la tarjeta de aprendizaje a un formato API
-   * @returns {Object} Datos de la tarjeta de aprendizaje en formato API
-   */
-  toAPI() {
-    return {
-      id: this.id,
-      id_testing_card: this.id_testing_card,
-      resultado: this.resultado,
-      hallazgo: this.hallazgo,
-      estado: this.estado, // Nuevo atributo
-      creado: this.created_at.toISOString(),
-      actualizado: this.updated_at.toISOString()
-    };
   }
 }
 
