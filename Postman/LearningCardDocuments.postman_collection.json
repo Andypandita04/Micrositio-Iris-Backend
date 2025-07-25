@@ -1,0 +1,430 @@
+{
+	"info": {
+		"_postman_id": "learning-card-docs-collection",
+		"name": "Learning Card Documents API",
+		"description": "Collection for testing Learning Card Documents endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Upload Learning Card Document",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response has success true\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.eql(true);",
+							"});",
+							"",
+							"pm.test(\"Response contains document data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.have.property('document');",
+							"    pm.expect(jsonData.data).to.have.property('publicUrl');",
+							"});",
+							"",
+							"// Save document ID for other tests",
+							"pm.test(\"Save document ID\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    if (jsonData.data && jsonData.data.document && jsonData.data.document.id) {",
+							"        pm.environment.set(\"learning_card_document_id\", jsonData.data.document.id);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "document",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/learning-card/{{learning_card_id}}/documents",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"learning-card",
+						"{{learning_card_id}}",
+						"documents"
+					]
+				},
+				"description": "Upload a document for a specific learning card. Supports PDF, Word, Excel, PowerPoint, images and text files up to 50MB."
+			}
+		},
+		{
+			"name": "Get Learning Card Documents",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has success true\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.eql(true);",
+							"});",
+							"",
+							"pm.test(\"Response contains documents array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.have.property('documents');",
+							"    pm.expect(jsonData.data.documents).to.be.an('array');",
+							"});",
+							"",
+							"pm.test(\"Response contains count\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.have.property('count');",
+							"    pm.expect(jsonData.data.count).to.be.a('number');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/learning-card/{{learning_card_id}}/documents",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"learning-card",
+						"{{learning_card_id}}",
+						"documents"
+					]
+				},
+				"description": "Get all documents for a specific learning card."
+			}
+		},
+		{
+			"name": "Get Document by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has success true\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.eql(true);",
+							"});",
+							"",
+							"pm.test(\"Response contains document\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.have.property('document');",
+							"    pm.expect(jsonData.data.document).to.have.property('id');",
+							"    pm.expect(jsonData.data.document).to.have.property('document_name');",
+							"    pm.expect(jsonData.data.document).to.have.property('document_url');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/learning-card/documents/{{learning_card_document_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"learning-card",
+						"documents",
+						"{{learning_card_document_id}}"
+					]
+				},
+				"description": "Get a specific document by its ID."
+			}
+		},
+		{
+			"name": "Delete Learning Card Document",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has success true\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.eql(true);",
+							"});",
+							"",
+							"pm.test(\"Response contains deleted document\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.have.property('document');",
+							"    pm.expect(jsonData.data).to.have.property('storageDeleted');",
+							"});",
+							"",
+							"// Clear document ID from environment",
+							"pm.test(\"Clear document ID\", function () {",
+							"    pm.environment.unset(\"learning_card_document_id\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/learning-card/documents/{{learning_card_document_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"learning-card",
+						"documents",
+						"{{learning_card_document_id}}"
+					]
+				},
+				"description": "Delete a specific document by its ID. This will remove both the database record and the file from storage."
+			}
+		},
+		{
+			"name": "Upload Large File (Error Test)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 413 (Payload Too Large)\", function () {",
+							"    pm.response.to.have.status(413);",
+							"});",
+							"",
+							"pm.test(\"Response has success false\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.eql(false);",
+							"});",
+							"",
+							"pm.test(\"Response contains file size error\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql('FILE_TOO_LARGE');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "document",
+							"type": "file",
+							"src": [],
+							"description": "Select a file larger than 50MB to test size validation"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/learning-card/{{learning_card_id}}/documents",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"learning-card",
+						"{{learning_card_id}}",
+						"documents"
+					]
+				},
+				"description": "Test file size validation by uploading a file larger than 50MB."
+			}
+		},
+		{
+			"name": "Upload Without File (Error Test)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 (Bad Request)\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response has success false\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.eql(false);",
+							"});",
+							"",
+							"pm.test(\"Response contains file required error\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql('FILE_REQUIRED');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{base_url}}/api/learning-card/{{learning_card_id}}/documents",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"learning-card",
+						"{{learning_card_id}}",
+						"documents"
+					]
+				},
+				"description": "Test file required validation by sending request without a file."
+			}
+		},
+		{
+			"name": "Get Documents for Invalid Learning Card ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 (Bad Request)\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response has success false\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.eql(false);",
+							"});",
+							"",
+							"pm.test(\"Response contains invalid ID error\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql('INVALID_LEARNING_CARD_ID');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/learning-card/invalid/documents",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"learning-card",
+						"invalid",
+						"documents"
+					]
+				},
+				"description": "Test validation by using an invalid learning card ID."
+			}
+		},
+		{
+			"name": "Delete Non-existent Document",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404 (Not Found)\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Response has success false\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.eql(false);",
+							"});",
+							"",
+							"pm.test(\"Response contains not found error\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql('DOCUMENT_NOT_FOUND');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/learning-card/documents/99999",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"learning-card",
+						"documents",
+						"99999"
+					]
+				},
+				"description": "Test error handling by trying to delete a non-existent document."
+			}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "collection_description",
+			"value": "Testing endpoints for Learning Card Documents management"
+		}
+	]
+}
