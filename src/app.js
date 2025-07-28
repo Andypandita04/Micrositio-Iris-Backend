@@ -16,6 +16,9 @@ import errorHandler from './middlewares/errorHandler.js';
 import bodyParser from 'body-parser'; 
 import nodePositionRoutes from './routes/nodePositionRoutes.js';
 import testingCardPlaybookRoutes from './routes/testingCardPlaybookRoutes.js';
+import testingCardDocumentRoutes from './routes/testingCardDocumentRoutes.js';
+import learningCardDocumentRoutes from './routes/learningCardDocumentRoutes.js';
+// import testRoutes from './routes/testRoutes.js';
  
  
  
@@ -44,6 +47,10 @@ app.use('/url_testing_card', urlTestingCardRoutes)
 app.use('/url_learning_card', urlLearningCardRoutes)
 app.use('/flow-positions', nodePositionRoutes)
 app.use('/testing_card_playbook', testingCardPlaybookRoutes);
+app.use('/api', testingCardDocumentRoutes);
+app.use('/api/learning-card', learningCardDocumentRoutes);
+// app.use('/debug', testRoutes);
+//app.use('/debug', testRoutes);
 
 // Ruta básica de prueba
 app.get('/', (req, res) => {
