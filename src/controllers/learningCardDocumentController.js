@@ -106,21 +106,21 @@ class LearningCardDocumentController {
       });
     }
   }
-
   static async deleteDocument(req, res) {
     try {
       const { documentId } = req.params;
 
-      // Validar documentId
-      if (!documentId || isNaN(parseInt(documentId))) {
+      // Validar documentId como UUID
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      if (!documentId || !uuidRegex.test(documentId)) {
         return res.status(400).json({
           success: false,
-          message: 'Invalid document ID',
+          message: 'Invalid document ID format. Expected UUID.',
           error: 'INVALID_DOCUMENT_ID'
         });
       }
 
-      const result = await LearningCardDocumentService.deleteDocument(parseInt(documentId));
+      const result = await LearningCardDocumentService.deleteDocument(documentId);
 
       return res.status(200).json({
         success: true,
@@ -149,21 +149,21 @@ class LearningCardDocumentController {
       });
     }
   }
-
   static async getDocumentById(req, res) {
     try {
       const { documentId } = req.params;
 
-      // Validar documentId
-      if (!documentId || isNaN(parseInt(documentId))) {
+      // Validar documentId como UUID
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      if (!documentId || !uuidRegex.test(documentId)) {
         return res.status(400).json({
           success: false,
-          message: 'Invalid document ID',
+          message: 'Invalid document ID format. Expected UUID.',
           error: 'INVALID_DOCUMENT_ID'
         });
       }
 
-      const document = await LearningCardDocumentService.getDocumentById(parseInt(documentId));
+      const document = await LearningCardDocumentService.getDocumentById(documentId);
 
       if (!document) {
         return res.status(404).json({
