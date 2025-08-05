@@ -68,6 +68,7 @@ git clone https://github.com/tu-org/micrositio-iris-backend.git
 npm install
 npm install multer
 npm install uuid
+npm install jsonwebtoken bcryptjs
 
 # 3. Configurar entorno (crear archivo .env)
 cp .env.example .env
