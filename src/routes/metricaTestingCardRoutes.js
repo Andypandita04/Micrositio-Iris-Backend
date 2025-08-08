@@ -109,6 +109,8 @@ router.post('/', controller.crear.bind(controller));
  *                 type: string
  *               criterio:
  *                 type: string
+ *               resultado:
+ *                 type: integer
  *     responses:
  *       200:
  *         description: Métrica actualizada
@@ -116,6 +118,36 @@ router.post('/', controller.crear.bind(controller));
  *         description: Métrica no encontrada
  */
 router.patch('/', controller.actualizar.bind(controller));
+
+/**
+ * @swagger
+ * /metrica_testing_card/resultado:
+ *   patch:
+ *     summary: Actualiza únicamente el resultado de una métrica
+ *     tags: [MetricasTestingCard]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_metrica_testing_card
+ *               - resultado
+ *             properties:
+ *               id_metrica_testing_card:
+ *                 type: integer
+ *                 description: ID de la métrica
+ *               resultado:
+ *                 type: integer
+ *                 description: Nuevo valor del resultado
+ *     responses:
+ *       200:
+ *         description: Resultado de métrica actualizado
+ *       404:
+ *         description: Métrica no encontrada
+ */
+router.patch('/resultado', controller.actualizarResultado.bind(controller));
 
 /**
  * @swagger
