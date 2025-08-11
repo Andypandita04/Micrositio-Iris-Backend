@@ -6,12 +6,15 @@
 import { secuenciaCreateSchema, secuenciaUpdateSchema } from '../middlewares/validation/secuenciaSchema.js';
 import ApiError from '../utils/ApiError.js';
 
-class Secuencia {
-  /**
+class Secuencia {  /**
    * Crea una instancia del modelo Secuencia.
    * @param {Object} data - Datos de la secuencia.
    */
   constructor(data) {
+    if (!data) {
+      throw new Error('Los datos de la secuencia son requeridos');
+    }
+    
     this.id_secuencia = data.id_secuencia;
     this.id_proyecto = data.id_proyecto;
     this.id_testing_card_padre = data.id_testing_card_padre;

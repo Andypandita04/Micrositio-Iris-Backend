@@ -66,8 +66,7 @@ class SecuenciaRepository {
    * @param {Object} secuenciaData - Datos de la secuencia
    * @returns {Promise<Object>} Secuencia creada (objeto plano)
    * @throws {ApiError} Si ocurre un error
-   */
-  async crear(secuenciaData) {
+   */  async crear(secuenciaData) {
     const { data, error } = await supabase
       .from('secuencia')
       .insert(secuenciaData)
@@ -77,9 +76,12 @@ class SecuenciaRepository {
       throw new ApiError(`Error al crear secuencia: ${error.message}`, 500);
     }
 
+    if (!data || data.length === 0) {
+      throw new ApiError('Error al crear secuencia: No se devolvieron datos', 500);
+    }
+
     return new Secuencia(data[0]).toAPI();
   }
-
   /**
    * Actualiza una secuencia existente
    * @param {number} id_secuencia - ID de la secuencia
@@ -96,6 +98,10 @@ class SecuenciaRepository {
 
     if (error) {
       throw new ApiError(`Error al actualizar secuencia: ${error.message}`, 500);
+    }
+
+    if (!data || data.length === 0) {
+      throw new ApiError(`Secuencia con ID ${id_secuencia} no encontrada`, 404);
     }
 
     return new Secuencia(data[0]).toAPI();

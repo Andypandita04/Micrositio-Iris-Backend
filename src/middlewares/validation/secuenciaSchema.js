@@ -30,10 +30,9 @@ const secuenciaUpdateSchema = z.object({
   id_testing_card_padre: z.number()
     .int()
     .positive('El ID de testing card debe ser un número positivo')
-    .optional(),
-  dia_inicio: z.coerce.date().optional(),
+    .optional(),  dia_inicio: z.coerce.date().optional(),
   dia_fin: z.coerce.date().optional(),
-  status: z.enum(statusValues).optional()
+  estado: z.enum(statusValues).optional()
   }).refine(
     data => !data.dia_fin || !data.dia_inicio || data.dia_fin >= data.dia_inicio,
     {
