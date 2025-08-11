@@ -16,10 +16,12 @@ class Secuencia {
     this.id_proyecto = data.id_proyecto;
     this.id_testing_card_padre = data.id_testing_card_padre;
     this.nombre = data.nombre;
+    this.dia_inicio = new Date(data.dia_inicio);
+    this.dia_fin = new Date(data.dia_fin);
     this.descripcion = data.descripcion || null;
     this.created_at = data.created_at ? new Date(data.created_at) : new Date();
     this.updated_at = data.updated_at ? new Date(data.updated_at) : new Date();
-    this.estado = data.estado || 'activa';
+    this.estado = data.estado || 'EN PLANEACION';
   }
 
   /**
@@ -63,7 +65,9 @@ class Secuencia {
       descripcion: this.descripcion ?? '',
       proyectoId: this.id_proyecto?.toString() ?? '',
       fechaCreacion: this.created_at ? this.created_at.toISOString() : '',
-      estado: this.estado ?? 'activa',
+      estado: this.estado ?? 'EN PLANEACION',
+      dia_inicio: this.dia_inicio.toISOString().split('T')[0],
+      dia_fin: this.dia_fin.toISOString().split('T')[0],
       // Si necesitas otros campos, agrégalos aquí
     };
   }

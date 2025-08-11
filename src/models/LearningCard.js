@@ -13,7 +13,7 @@ class LearningCard {
     this.id_testing_card = data.id_testing_card || null;
     this.resultado = data.resultado || null;
     this.hallazgo = data.hallazgo || null;
-    this.id_responsable = data.id_responsable || null;
+    this.id_responsable = data.id_responsable  || null;
     this.created_at = data.created_at ? new Date(data.created_at) : new Date();
     this.updated_at = data.updated_at ? new Date(data.updated_at) : new Date();
   }
