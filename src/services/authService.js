@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import  supabase  from '../config/supabaseClient.js';
+import supabase from '../config/supabaseClient.js';
 import JWTUtils from '../utils/jwtUtils.js';
 import ApiError from '../utils/ApiError.js';
 
