@@ -1,7 +1,7 @@
 // src/middlewares/validation/testingCardSchema.js
 import { z } from 'zod';
 
-const statusValues = ['En desarrollo', 'En validación', 'En ejecución', 'Cancelado', 'Terminado'];
+const statusValues = ['EN PLANEACION', 'EN VALIDACION', 'EN ANALISIS', 'CANCELADO', 'TERMINADO'];
 
 // Esquema base que puede ser reutilizado
 const testingCardBaseSchema = z.object({
@@ -15,7 +15,7 @@ const testingCardBaseSchema = z.object({
   dia_fin: z.coerce.date().optional(),
   anexo_url: z.string().url('Debe ser una URL válida').optional(),
   id_responsable: z.number().int().positive('El ID del responsable debe ser un número positivo').optional(),
-  status: z.enum(statusValues).optional().default('En desarrollo')
+  status: z.enum(statusValues).optional().default('EN PLANEACION')
 });
 
 // Esquema para creación con validación adicional de fechas

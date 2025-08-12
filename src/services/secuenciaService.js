@@ -44,14 +44,13 @@ class SecuenciaService {
     }
     return secuencia.toAPI();
   }
-
   /**
    * Obtiene todas las secuencias
    * @returns {Promise<Array>} Lista de secuencias
    */
   async obtenerTodas() {
     const secuencias = await this.secuenciaRepo.obtenerTodas();
-    return secuencias.map(sec => sec.toAPI());
+    return secuencias; // El repositorio ya devuelve objetos planos con toAPI()
   }
 
   /**
