@@ -29,6 +29,7 @@ class CelulaProyectoService {
     }
   }
 
+
   async obtenerPorEmpleado(idEmpleado) {
     if (!idEmpleado) {
       throw new ApiError('Se requiere el ID del empleado', 400);
@@ -117,6 +118,39 @@ class CelulaProyectoService {
     );
     return relaciones.map(rel => rel.toAPI ? rel.toAPI() : rel);
   }
+  async eliminar(id) {
+    if (!id) {
+      throw new ApiError('Se requiere el ID de la relación', 400);
+    }
+
+    const relacion = await this.celulaProyectoRepo.obtenerPorId(id);
+    if (!relacion) {
+      throw new ApiError('La relación no existe', 404);
+    }
+
+    await this.celulaProyectoRepo.eliminar(id);
+  }
+
+  async actualizarActivo(id, activo) {
+    if (!id) {
+      throw new ApiError('Se requiere el ID de la relación', 400);
+    }
+
+    if (typeof activo !== 'boolean') {
+      throw new ApiError('El campo activo debe ser un valor booleano', 400);
+    }
+
+    // Validar que la relación existe
+    const relacionExistente = await this.celulaProyectoRepo.obtenerPorId(id);
+    if (!relacionExistente) {
+      throw new ApiError('La relación no existe', 404);
+    }
+
+    const relacionActualizada = await this.celulaProyectoRepo.actualizarActivo(id, activo);
+    return relacionActualizada.toAPI();
+  }
+
+
 }
 
 export default CelulaProyectoService;

@@ -83,6 +83,19 @@ class MetricaTestingCardService {
   }
 
   /**
+   * Actualiza el resultado de una métrica
+   * @param {number} idMetrica - ID de la métrica
+   * @param {Object} resultadoData - Datos del resultado a actualizar
+   * @returns {Promise<Object>} Métrica actualizada
+   * @throws {ApiError} Si la métrica no existe
+   */
+  async actualizarResultado(idMetrica, resultadoData) {
+    const datosValidados = MetricaTestingCard.validateResultadoUpdate(resultadoData);
+    const metrica = await this.metricaRepo.actualizar(idMetrica, datosValidados);
+    return metrica.toAPI();
+  }
+
+  /**
    * Elimina una métrica
    * @param {number} idMetrica - ID de la métrica
    * @returns {Promise<Object>} Métrica eliminada

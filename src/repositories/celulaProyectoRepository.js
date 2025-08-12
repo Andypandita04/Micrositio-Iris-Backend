@@ -154,6 +154,34 @@ class CelulaProyectoRepository {
 
     return new CelulaProyecto(data[0]);
   }
+  /**
+   * Obtiene una relación célula-proyecto por su ID.
+   * @async
+   * @param {number} id - ID de la relación.
+   * @returns {Promise<CelulaProyecto|null>} Relación encontrada o null si no existe.
+   * @throws {ApiError} Si ocurre un error al consultar.
+   */
+  async obtenerPorId(id) {
+    const { data, error } = await supabase
+      .from('celula_proyecto')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // No encontrado
+        return null;
+      }
+      throw new ApiError(`Error al obtener relación por ID: ${error.message}`, 500);
+    }
+
+    return new CelulaProyecto(data);
+  }
+
+
+
+
 }
 
 export default CelulaProyectoRepository;

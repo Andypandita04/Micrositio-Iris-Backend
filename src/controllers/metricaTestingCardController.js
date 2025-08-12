@@ -1,6 +1,6 @@
 // src/controllers/metricaTestingCardController.js
 import MetricaTestingCardService from '../services/metricaTestingCardService.js';
-import { metricaCreateSchema, metricaUpdateSchema } from '../middlewares/validation/metricaTestingCardSchema.js';
+import { metricaCreateSchema, metricaUpdateSchema, metricaResultadoUpdateSchema } from '../middlewares/validation/metricaTestingCardSchema.js';
 import ApiError from '../utils/ApiError.js';
 
 class MetricaTestingCardController {
@@ -96,6 +96,27 @@ class MetricaTestingCardController {
       const { id_metrica_testing_card, ...updateData } = req.body;
       const validatedData = metricaUpdateSchema.parse(updateData);
       const metrica = await this.metricaService.actualizar(id_metrica_testing_card, validatedData);
+      res.json(metrica);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Actualiza el resultado de una métrica
+   * @param {Object} req - Request de Express
+   * @param {Object} res - Response de Express
+   * @param {Function} next - Next middleware
+   */
+  async actualizarResultado(req, res, next) {
+    try {
+      if (!req.body.id_metrica_testing_card) {
+        throw new ApiError('Se requiere el campo id_metrica_testing_card en el body', 400);
+      }
+
+      const { id_metrica_testing_card, resultado } = req.body;
+      const validatedData = metricaResultadoUpdateSchema.parse({ resultado });
+      const metrica = await this.metricaService.actualizarResultado(id_metrica_testing_card, validatedData);
       res.json(metrica);
     } catch (error) {
       next(error);
