@@ -12,7 +12,6 @@ class EmpleadoController {
     const empleadoRepository = new EmpleadoRepository();
     this.empleadoService = new EmpleadoService(empleadoRepository);
   }
-
   /**
    * Maneja la obtención de un empleado por ID (GET /empleados/:id).
    * @param {Object} req - Request de Express.
@@ -21,16 +20,18 @@ class EmpleadoController {
    */
   async obtenerPorId(req, res, next) {
     try {
-      if (!req.body || !req.body.id) {
-        throw new ApiError('Se requiere el campo "id" en el body', 400);
+      const { id } = req.params;
+      
+      if (!id) {
+        throw new ApiError('Se requiere el parámetro "id" en la URL', 400);
       }
       
       // Convertir el ID a número entero
-    const idEmpleado = parseInt(req.body.id);
-    
-    if (isNaN(idEmpleado)) {
-      throw new ApiError('El ID debe ser un número válido', 400);
-    }
+      const idEmpleado = parseInt(id);
+      
+      if (isNaN(idEmpleado)) {
+        throw new ApiError('El ID debe ser un número válido', 400);
+      }
 
       const empleado = await this.empleadoService.obtenerPorId(idEmpleado);
       res.json(empleado);
@@ -70,7 +71,6 @@ class EmpleadoController {
       next(new ApiError(error.message, 400));
     }
   }
-
   /**
    * Maneja la actualización de un empleado (PATCH /empleados/:id).
    * @param {Object} req - Request de Express.
@@ -79,19 +79,25 @@ class EmpleadoController {
    */
   async actualizar(req, res, next) {
     try {
-      if (!req.body.id) {
-        throw new ApiError('Se requiere el campo "id" en el body', 400);
+      const { id } = req.params;
+      
+      if (!id) {
+        throw new ApiError('Se requiere el parámetro "id" en la URL', 400);
       }
       
-      const { id, ...updateData } = req.body;
-      const validatedData = empleadoUpdateSchema.parse(updateData);
-      const empleado = await this.empleadoService.actualizar(id, validatedData);
+      const idEmpleado = parseInt(id);
+      
+      if (isNaN(idEmpleado)) {
+        throw new ApiError('El ID debe ser un número válido', 400);
+      }
+      
+      const validatedData = empleadoUpdateSchema.parse(req.body);
+      const empleado = await this.empleadoService.actualizar(idEmpleado, validatedData);
       res.json(empleado);
     } catch (error) {
       next(error);
     }
   }
-
   /**
    * Maneja la desactivación de un empleado (DELETE /empleados/:id).
    * @param {Object} req - Request de Express.
@@ -100,16 +106,19 @@ class EmpleadoController {
    */
   async desactivar(req, res, next) {
     try {
-      if (!req.body ||!req.body.id) {
-        throw new ApiError('Se requiere el campo "id" en el body', 400);
+      const { id } = req.params;
+      
+      if (!id) {
+        throw new ApiError('Se requiere el parámetro "id" en la URL', 400);
       }  
 
-    // Convertir el ID a número entero
-    const idEmpleado = parseInt(req.body.id);
-    
-    if (isNaN(idEmpleado)) {
-      throw new ApiError('El ID debe ser un número válido', 400);
-    }
+      // Convertir el ID a número entero
+      const idEmpleado = parseInt(id);
+      
+      if (isNaN(idEmpleado)) {
+        throw new ApiError('El ID debe ser un número válido', 400);
+      }
+      
       const empleado = await this.empleadoService.desactivar(idEmpleado);
       res.json(empleado);
     } catch (error) {

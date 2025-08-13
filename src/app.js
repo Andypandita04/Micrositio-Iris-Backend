@@ -18,6 +18,9 @@ import nodePositionRoutes from './routes/nodePositionRoutes.js';
 import testingCardPlaybookRoutes from './routes/testingCardPlaybookRoutes.js';
 import testingCardDocumentRoutes from './routes/testingCardDocumentRoutes.js';
 import learningCardDocumentRoutes from './routes/learningCardDocumentRoutes.js';
+import usuarioRoutes from './routes/usuarioRoutes.js';
+import usuarioProyectoRoutes from './routes/usuarioProyectoRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 // import testRoutes from './routes/testRoutes.js';
  
  
@@ -49,6 +52,9 @@ app.use('/flow-positions', nodePositionRoutes)
 app.use('/testing_card_playbook', testingCardPlaybookRoutes);
 app.use('/api', testingCardDocumentRoutes);
 app.use('/api/learning-card', learningCardDocumentRoutes);
+app.use('/usuarios', usuarioRoutes);
+app.use('/usuario_proyecto', usuarioProyectoRoutes);
+app.use('/auth', authRoutes);
 // app.use('/debug', testRoutes);
 //app.use('/debug', testRoutes);
 

@@ -12,31 +12,31 @@ const empleadoController = new EmpleadoController();
 
 /**
  * Ruta GET para obtener un empleado por ID.
- * @name get/empleados/
+ * @name get/empleados/:id
  * @function
  */
-router.get('/', empleadoController.obtenerPorId.bind(empleadoController));
+router.get('/:id', empleadoController.obtenerPorId.bind(empleadoController));
 
 /**
  * Ruta POST para crear un nuevo empleado.
- * @name post/empleados
+ * @name post/empleados/
  * @function
  */
 router.post('/', empleadoController.crear.bind(empleadoController));
 
 /**
  * Ruta PATCH para actualizar un empleado existente.
- * @name patch/empleados/
+ * @name patch/empleados/:id
  * @function
  */
-router.patch('/', empleadoController.actualizar.bind(empleadoController));
+router.patch('/:id', empleadoController.actualizar.bind(empleadoController));
 
 /**
  * Ruta DELETE para desactivar un empleado (eliminación lógica).
- * @name delete/empleados/
+ * @name delete/empleados/:id
  * @function
  */
-router.delete('/', empleadoController.desactivar.bind(empleadoController));
+router.delete('/:id', empleadoController.desactivar.bind(empleadoController));
 
 /**
  * Ruta GET para obtener todos los empleados.
