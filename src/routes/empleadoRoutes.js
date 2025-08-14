@@ -15,7 +15,7 @@ const empleadoController = new EmpleadoController();
  * @name get/empleados/
  * @function
  */
-router.get('/', empleadoController.obtenerPorId.bind(empleadoController));
+router.post('/', empleadoController.obtenerPorId.bind(empleadoController));
 
 /**
  * Ruta POST para crear un nuevo empleado.
